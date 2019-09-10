@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Sign in</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="img/mechanics.png" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<!--===============================================================================================-->
+
+</head>
+
+<body>
+		<script>   // Your web app's Firebase configuration
+				var firebaseConfig = {
+				  apiKey: "AIzaSyB6QMhAaE3oktdyy8deswQNQIw4cwPq-W4",
+				  authDomain: "fixit-app-e3546.firebaseapp.com",
+				  databaseURL: "https://fixit-app-e3546.firebaseio.com",
+				  projectId: "fixit-app-e3546",
+				  storageBucket: "fixit-app-e3546.appspot.com",
+				  messagingSenderId: "139817871220",
+				  appId: "1:139817871220:web:b634b75fb562dcd2"
+				};
+				// Initialize Firebase
+				
+				firebase.initializeApp(firebaseConfig);
+				</script>
+	<ons-page>
+		<div class="limiter">
+
+			<div class="container-login100" >
+
+				<div class="wrap-login100 p-t-190 p-b-30">
+
+					
+						<div class="login100-form-avatar">
+							<img src="img/mechanics.png" alt="AVATAR">
+						</div>
+
+						<span class="login100-form-title p-t-20 p-b-45">
+							Sign in
+						</span>
+
+						<div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
+							<input class="input100" type="text"  placeholder="Email" id="username">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+									<i class="fa fa-envelope"></i>
+							</span>
+						</div>
+
+						<div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
+							<input class="input100" type="password" placeholder="Password" id="password">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+								<i class="fa fa-lock"></i>
+							</span>
+						</div>
+
+						<div class="container-login100-form-btn p-t-10">
+							<button class="login100-form-btn" onclick="login()">
+								Sign in
+							</button>
+						</div>
+
+
+
+
+					<div class="text-center t02 w-full">
+						<a class="txt1" href="#">
+							Or Sign in Using
+
+						</a>
+					</div>
+					<div class="flex-c-m">
+						<a href="#" class="login100-social-item bg1">
+							<i class="fa fa-facebook"></i>
+						</a>
+
+						<a href="#" class="login100-social-item bg3" onclick="google()">
+							<i class="fa fa-google"></i>
+						</a>
+					</div>
+					<div class="text-center div-to1 w-full">
+						<a class="t01" href="sign-up.html" style="color:white">
+							Sign Up
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ons-page>
+
+ <script> 
+ //login with google
+        function google() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+            firebase.auth().signInWithRedirect(provider);
+            //function google
+            firebase.auth().getRedirectResult().then(function (result) {
+                if (result.credential) {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    var token = result.credential.accessToken;
+                    // ...
+                }
+                // The signed-in user info.
+                var user = result.user;
+            }).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+            });
+        }
+
+//login username
+        var login = function () {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            firebase.auth().signInWithEmailAndPassword(username, password).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(error.code + ':' + error.message);
+                ons.notification.alert('Login faild');
+                // ...
+            });
+			    
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                //Send user to home.html
+                window.location.href = 'index.html';
+            }
+        })
+        };
+      
+        
+ 
+ 
+ </script>
+
+
+
+	<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+</body>
+
+</html>

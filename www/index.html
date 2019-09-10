@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+
+
+  <title>Document</title>
+
+  <script>   // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyB6QMhAaE3oktdyy8deswQNQIw4cwPq-W4",
+    authDomain: "fixit-app-e3546.firebaseapp.com",
+    databaseURL: "https://fixit-app-e3546.firebaseio.com",
+    projectId: "fixit-app-e3546",
+    storageBucket: "fixit-app-e3546.appspot.com",
+    messagingSenderId: "139817871220",
+    appId: "1:139817871220:web:b634b75fb562dcd2"
+  };
+  // Initialize Firebase
+  
+  firebase.initializeApp(firebaseConfig);
+   // Initialize Cloud Firestore through Fireba
+  firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    window.location.href='home.html'
+  } else {
+    // User is signed out.
+    window.location.href='sign-in.html'
+  }
+  });  
+  </script>
+</head>
+<body>
+
+</body>
+
+</html>

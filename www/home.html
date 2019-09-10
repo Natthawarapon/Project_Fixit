@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+
+  <!-- onsenui link  -->
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+
+  <!-- leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+  <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+
+  <!--Font-->
+  <link href="https://fonts.googleapis.com/css?family=Pridi:600&display=swap" rel="stylesheet">
+  <!--Bootstrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!--CSS-->
+  <link rel="stylesheet" type="text/css" href="css/home.css">
+
+  <title>Home</title>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyB6QMhAaE3oktdyy8deswQNQIw4cwPq-W4",
+      authDomain: "fixit-app-e3546.firebaseapp.com",
+      databaseURL: "https://fixit-app-e3546.firebaseio.com",
+      projectId: "fixit-app-e3546",
+      storageBucket: "fixit-app-e3546.appspot.com",
+      messagingSenderId: "139817871220",
+      appId: "1:139817871220:web:b634b75fb562dcd2"
+    };
+    // Initialize Firebase
+
+    firebase.initializeApp(firebaseConfig);
+    var firestore = firebase.firestore();
+  </script>
+
+</head>
+
+<body>
+  <!--  Page  -->
+  <ons-page>
+    <!--   toolbar  -->
+    <ons-toolbar style="background-color: #FFE200 ">
+      <div class="center">Fix it</div>
+      <div class="right">
+        <ons-toolbar-button>
+          <ons-icon icon="fa-sign-out-alt" style="color: black" onclick="logout()"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+    </ons-toolbar>
+    <!--  //toolbar  -->
+
+    <!--   toolbar  -->
+    <ons-tabbar style="background-color: #FFE200" swipeable position="under">
+      <ons-tab style="background-color: #FFE200" page="tab1.html" label="Map"
+        icon="fa-map-marked-alt, material:fa-map-marked-alt" active>
+      </ons-tab>
+      <ons-tab style="background-color: #FFE200" page="tab2.html" label="Coins" icon="fa-coins" active-icon="fa-coins">
+      </ons-tab>
+      <ons-tab style="background-color: #FFE200" page="tab3.html" label="Notification" icon="fa-history"
+        active-icon="fa-history">
+      </ons-tab>
+      <ons-tab style="background-color: #FFE200" page="tab4.html" label="Setttings" icon="md-settings"
+        active-icon="md-settings">
+      </ons-tab>
+
+    </ons-tabbar>
+    <!-- //toolbar -->
+  </ons-page>
+  <!--  //page ========= -->
+
+  <!--  ======================================================tab1 >> Maps ===================================================== -->
+  <template id="tab1.html">
+    <ons-page id="Tab1">
+
+      <!--Test BTN-->
+      <ons-navigator swipeable id="myNavigator" page="test1.html"></ons-navigator>
+
+      <template id="test1.html">
+        <ons-page id="test1">
+          <center style="background-color: white">
+
+            <!--<ons-button style="background-color: rgb(56, 56, 54)">List</ons-button>-->
+          </center>
+
+          <ons-card id="map" style="width: 95%; height : 120%">
+
+            <script src="js/home-map.js"></script>
+          
+          </ons-card>
+        </ons-page>
+      </template>
+
+      <!-- =========================Detail store information =========================================== -->
+      <template id="detailStore.html">
+        <ons-page id="test2">
+
+          <ons-toolbar>
+            <div class="left">
+              <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center"></div>
+          </ons-toolbar>
+          <ons-card>
+            <!-- ==========Carousal========== -->
+            <ons-carousel fullscreen swipeable auto-scroll overscrollable id="carousel" style="height: 250px;">
+              <ons-carousel-item
+                style="background: url('https://www.thairath.co.th/media/4DQpjUtzLUwmJZZPD15TX0i2J7gu4aL4Jy5bOehYBSEJ.jpg') no-repeat center; background-size: contain;">
+
+              </ons-carousel-item>
+              <ons-carousel-item
+                style="background: url('https://www.grandprix.co.th/wp-content/uploads/2017/02/BIKE-TECHNIC-1.jpg') no-repeat center; background-size: contain;">
+
+              </ons-carousel-item>
+              <ons-carousel-item
+                style="background: url('http://202.29.231.181/datas/gallery/473/2.jpg') no-repeat center; background-size: contain;">
+
+              </ons-carousel-item>
+            </ons-carousel>
+
+            <center>
+              <section style="padding: 10px">
+                <button type="button" class="btn btn-outline-success"><i class="fa fa-phone"
+                    onclick="createAlertDialog()"></i></button>
+                <button type="button" class="btn btn-outline-warning" id="chatclick"><i class="fa fa-comment"
+                    onclick="chat()"></i></button>
+                <button type="button" class="btn btn-outline-primary" id="btn-map" onclick="myNavFunc()"><i
+                    class="fa fa-compass"></i></button>
+              </section>
+            </center>
+
+            <ons-card style="background-color: #cce3f0;">
+              <div class="title">
+                <p id="namestore" style="font-size: 16px"></p>
+                <p id="address" style="font-size: 12px; font-style: normal">
+              </div>
+              <ons-list-item>
+                <div class="right" style="font-size: 12px;">
+                  สถานะร้าน &nbsp; <i class="fa fa-circle" style="color: yellow;"></i>
+                </div>
+                <!-- <div class="right">
+                    <ons-switch checked></ons-switch>
+                  </div> -->
+              </ons-list-item>
+              </div>
+            </ons-card>
+          </ons-card>
+          <!-- ons-cord review -->
+          <ons-card>
+            <p style="font-size: 25px">Review</p>
+            <ons-card style="background-color: #cfe779;">
+
+              <div class="title">
+                <p style="font-size: 16px">นายเอ้ นามสมมติ</p>
+                <p style="font-size: 12px; font-style: normal">ถูกและดี ราคาเป็นกันเอง ช่างซ่อมหล่อมาก<p>
+              </div>
+
+            </ons-card>
+            <ons-card style="background-color: #cfe779;">
+
+              <div class="title">
+                <p style="font-size: 16px">นางสาวพลัด นามสมมติ</p>
+                <p style="font-size: 12px; font-style: normal">ช่างซ่อมเป็นกันเองมาก <p>
+              </div>
+
+            </ons-card>
+          </ons-card>
+
+          <script>
+            function myNavFunc() {
+
+              var long = 98.3370182;
+              var lat = 7.8947922;
+              // If it's an iPhone..
+              if ((navigator.platform.indexOf("iPhone") != -1)
+                || (navigator.platform.indexOf("iPod") != -1)
+                || (navigator.platform.indexOf("iPad") != -1)
+                || (navigator.platform.indexOf("Android") != -1))
+                window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+              else
+                window.open('http://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+            }
+          </script>
+        </ons-page>
+      </template>
+      <!-- =========================Chat page =========================================== -->
+      <template id="chat.html">
+        <ons-page id="test2">
+
+          <ons-toolbar>
+            <div class="left">
+              <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center"></div>
+          </ons-toolbar>
+          <div class="col-sm-3 col-sm-offset-4 frame">
+            <ul></ul>
+            <div>
+              <div class="msj-rta macro">
+                <div class="text text-r" style="background:whitesmoke !important">
+                  <input class="mytext" placeholder="Type a message" />
+                </div>
+
+              </div>
+              <div style="padding:10px;">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </div>
+            </div>
+          </div>
+          <!--============ link chat css ==============-->
+            <link rel="stylesheet" href="css/chat.css">
+            <script src="js/chat.js"></script>
+        </ons-page>
+      </template>
+      <!-- alert เรียกซ่อม  -->
+      <template id="alert-dialog.html">
+        <ons-alert-dialog id="my-alert-dialog" modifier="rowfooter">
+          <div class="alert-dialog-title">คุณต้องการเรียกซ่อม</div>
+          <div class="alert-dialog-content">
+            ถ้าคุณต้องการเรียกซ่อมให้ กด "เรียกซ่อม" และคุณจะได้รับเหรียญเมื่อทำการซ่อมเสร็จ
+          </div>
+          <div class="alert-dialog-footer">
+            <ons-alert-dialog-button onclick="hideAlertDialog()">ยกเลิก</ons-alert-dialog-button>
+            <ons-alert-dialog-button onclick="showModal()">เรียกซ่อม</ons-alert-dialog-button>
+          </div>
+        </ons-alert-dialog>
+      </template>
+
+      <!-- Loading -->
+      <ons-modal direction="up">
+        <div style="text-align: center">
+          <p>
+            <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
+          </p>
+        </div>
+      </ons-modal>
+    </ons-page>
+  </template>
+  <script>
+
+    var createAlertDialog = function () {
+      var dialog = document.getElementById('my-alert-dialog');
+
+      if (dialog) {
+        dialog.show();
+      } else {
+        ons.createElement('alert-dialog.html', { append: true })
+          .then(function (dialog) {
+            dialog.show();
+          });
+      }
+    };
+
+    var hideAlertDialog = function () {
+
+      document
+        .getElementById('my-alert-dialog')
+        .hide();
+
+    };
+
+    function showModal() {
+
+      document
+        .getElementById('my-alert-dialog')
+        .hide();
+      var modal = document.querySelector('ons-modal');
+      modal.show();
+      setTimeout(function () {
+        modal.hide();
+      }, 2000);
+    }
+  </script>
+
+  <!--  ====================================================== // tab1 >> Maps ===================================================== -->
+
+  <!--  ======================================================tab2 >> Coins ===================================================== -->
+  <template id="tab2.html">
+    <ons-page id="Tab2">
+      <ons-card>
+
+        <center><img src="img/coin.png" style="width: 60px;"> &nbsp; 200</center>
+        <ons-card style="background-color: #a5cec3;">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" style="font-size: 18px;">รหัสร้าน &nbsp;</span>
+            </div>
+            <input type="text" aria-label="First name" class="form-control">
+          </div>
+          <hr>
+
+          <div class="input-group">
+            <span class="input-group-text" style="font-size: 18px;">จำนวนเหรียญ &nbsp;</span>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">เลือกจำนวนเหรียญ</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">10 บาท (150 coins)</a>
+                <a class="dropdown-item" href="#">20 บาท (250 coins)</a>
+                <a class="dropdown-item" href="#">50 บาท (450 coins)</a>
+              </div>
+            </div>
+          </div>
+        </ons-card>
+        <center>
+          <section style="padding: 10px">
+            <button type="button" class="btn btn-danger">ยกเลิก</button>
+            <button type="button" class="btn btn-success" onclick="createAlertDialog1()">ตกลง</button>
+
+          </section>
+        </center>
+      </ons-card>
+      <template id="alert-dialog1.html">
+        <ons-alert-dialog id="my-alert-dialog1" modifier="rowfooter">
+          <div class="alert-dialog-title">แสดงข้อความนี้ให้ช่างซ่อม กรอกรหัสยืนยันส่วนลด</div>
+          <div class="alert-dialog-content">
+
+            <input type="password" aria-label="First name" class="form-control">
+          </div>
+          <div class="alert-dialog-footer">
+            <ons-alert-dialog-button onclick="hideAlertDialog1()">Cancel</ons-alert-dialog-button>
+            <ons-alert-dialog-button onclick="hideAlertDialog1()">OK</ons-alert-dialog-button>
+          </div>
+        </ons-alert-dialog>
+      </template>
+      <script>
+        var createAlertDialog1 = function () {
+          var dialog = document.getElementById('my-alert-dialog1');
+
+          if (dialog) {
+            dialog.show();
+          } else {
+            ons.createElement('alert-dialog1.html', { append: true })
+              .then(function (dialog) {
+                dialog.show();
+              });
+          }
+        };
+
+        var hideAlertDialog1 = function () {
+          document
+            .getElementById('my-alert-dialog1')
+            .hide();
+        };
+      </script>
+    </ons-page>
+  </template>
+  <!--  ====================================================== // tab2 >> Coins ===================================================== -->
+
+  <!--  ======================================================tab3 >> History ===================================================== -->
+  <template id="tab3.html">
+    <ons-page id="Tab3">
+      <ons-list-header>20/06/2019</ons-list-header>
+      <ons-card class="notificate">
+        <span>เปลี่ยนรหัสผ่าน</span>
+        <span class="notitext">คุณได้ทำการเปลี่ยนรหัสเมื่อเวลา 12.06 น.</span>
+      </ons-card>
+      <ons-card class="notificate">
+        <span>ได้รับเหรียญ 20 เหรียญ</span>
+        <span class="notitext">คุณได้รับเหรียญ 20 เหรียญจากการขอรับบริการซ่อม เมื่อ 18.06 น.</span>
+      </ons-card>
+
+    </ons-page>
+  </template>
+  <!--  ====================================================== // tab3 >> History ===================================================== -->
+
+  <!--  ======================================================tab4 >> Setttings ===================================================== -->
+  <template id="tab4.html">
+    <ons-page id="tab4">
+      <!-- crad profile -->
+      <ons-card>
+        <center> <img src="img/user.png" alt="Onsen UI" style="width: 35%">
+          <div class="title" style="font-size: 25px">
+            สมยุทธ์ &nbsp; ลาพักงาน
+          </div>
+        </center>
+      </ons-card>
+      <!-- //crad profile -->
+
+      <!-- card setting -->
+      <ons-card>
+        <div class="content">
+          <ons-list>
+            <ons-list-header>Setttings</ons-list-header>
+            <ons-list-item>Help & Support</ons-list-item>
+            <ons-list-item>Contact Us</ons-list-item>
+            <ons-list-item>Terms & Conditions</ons-list-item>
+          </ons-list>
+        </div>
+      </ons-card>
+      <!-- //crad setting -->
+
+    </ons-page>
+  </template>
+
+  <!--  ====================================================== // tab4 >> Settings ===================================================== -->
+
+  <script>
+
+
+    document.addEventListener('prechange', function (event) {
+
+      if (event.index == 0) {
+        console.log('map clicked');
+        // get data for map screen  
+        if (document.getElementById('chatclick').clicked == true) {
+          alert("button was clicked");
+        }
+
+      } else if (event.index == 1) {
+        console.log('coins clicked');
+        // get data for coins screen  
+
+      }
+      else if (event.index == 2) {
+        console.log('history clicked');
+        // get data for history screen  
+      }
+      else if (event.index == 3) {
+        console.log('settings clicked');
+        // get data for settings screen  
+      }
+
+    });
+
+
+
+  </script>
+
+  <script>
+    //map pushPage to Detail Store
+    function pushPage(name) {
+      document.querySelector('#myNavigator').pushPage('detailStore.html');
+      firestore.collection("Technicians").doc(name).get().then(function (doc) {
+
+        console.log("nameDatail : " + name);
+
+        document.getElementById('namestore').innerHTML = name;
+        document.getElementById('address').innerHTML = doc.data().address;
+
+      });
+      // console.log(doc.data());
+
+    }
+
+    function chat() {
+      document.querySelector('#myNavigator').pushPage('chat.html');
+      showdata();
+
+    }
+
+ 
+
+    // const preObject = document.getElementById('chat2');
+
+    
+// function showdata() {
+  var firebaseRef=firebase.database().ref('Chat/');
+    // var firebaseRefList = firebaseRef.child('chat1');
+    firebaseRef.on('value',snap => console.log(snap.val()));
+
+// }
+// =================== เพิ่ม ห้องแชทใหม่ ของ  customer คนใหม่และร้านซ่อมใหม่ ===========================
+// var ref = firebase.database().ref("Chat");
+// var ChatRef = ref.push();
+// console.log("Chat key", ChatRef.key);
+// var ChatRef = ref.push(
+//   {
+//     Customer : "สมใจ สุดดจัด",
+//     NameStor : "Creamstore"
+//   }
+// );
+
+// var MessagesRef = ChatRef.child('Message');
+// // Create a new ref and log it’s push key
+// var msg_Ref = MessagesRef.push();
+// console.log("msg key", msg_Ref.key);
+// // Create a new ref and save data to it in one step
+// var msg_Ref = MessagesRef.push({
+//  who : "สมใจ สุดดจัด",
+//  text : "I eat too much ice cream"
+// });
+    
+
+
+// =================== เพิ่มการ text ของห้องแชทเก่า  =========================== 
+
+// var ref = firebase.database().ref("Chat");
+// var ChatRef = ref.on().get();
+// var ChatRef = ref.push();
+// console.log("Chat key", ChatRef.key);
+// var who = {
+//     Customer : "สมใจ สุดดจัด",
+//     NameStor : "Creamstore"
+//   };
+
+// var ChatRef = ref.push();
+
+// var ChatRef_key = ChatRef.key;
+// var MessagesRef = ChatRef.child("Message");
+// // Create a new ref and log it’s push key
+// var msg_Ref = MessagesRef.push();
+// console.log("msg key", msg_Ref.key);
+// // Create a new ref and save data to it in one step
+// var msg_Ref = MessagesRef.push({
+//  who : "สมใจ สุดดจัด",
+//  text : "I eat too much ice cream"
+// });
+//=======================================================================================================
+
+
+// var ref =  firebase.database().ref('Chat');
+// var chats = ref.push();
+// var chatsRef = chats.key;
+
+// var chatsRefs =localStorage.setItem('chatsRef::',chats.key);
+// var messanger = {customer : "ภัศรา เรืองรรัตน์", namestore :"CreamStore"}
+// ref.child(chatsRef).set(messanger);
+
+// // var chatsRef_setLocalStorage =localStorage.setItem('chatsRef::',chats.key);
+// // var chatsRef_getLocalStorage = localStorage.getItem("chatsRef_setLocalStorage");
+// // console.log("chatsRef ::"+chatsRef_getLocalStorage );
+
+// var messagesRef = chats.child("messager");
+// var messageRef = messagesRef.push();
+
+var timestamp = new Date().toString();
+// var message = {msg :"hi hihihi",who:"สมใจ สุดดจัด",timestamp:timestamp};
+var message2 = {msg :"hii",who:"เอ้ สุดดจัด",timestamp:timestamp};
+// messagesRef.child(messageRef.key).set(message);
+
+
+// var chatsRefgg = localStorage.getItem("chatsRefs");
+
+var messageRef1 = firebase.database().ref('Chat/-LoH2iBG5vSVbE4JP969/messager');
+messageRef1.push(message2)
+
+  </script>
+
+  <!-- <script type="text/javascript" src="cordova.js"></script> -->
+  <script type="text/javascript" src="js/home.js"></script>
+  <script type="text/javascript" src="js/logout.js"></script>
+  <!-- <script type="text/javascript" src="js/map.js"></script> -->
+
+
+  <style>
+    * {
+      font-family: 'Pridi', serif;
+    }
+
+    .title {
+      font-family: 'Pridi', serif;
+    }
+
+    .center {
+      font-family: 'Pridi', serif;
+
+    }
+
+    .right {
+      font-family: 'Pridi', serif;
+    }
+
+    .notificate {
+      font-size: 16px;
+    }
+
+    .notitext {
+      color: gray;
+    }
+  </style>
+
+</body>
+
+</html>

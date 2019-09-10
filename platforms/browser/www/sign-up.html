@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="img/mechanics.png" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--===============================================================================================-->
+
+    <script>
+
+
+    </script>
+</head>
+
+<body>
+
+    <ons-page>
+        <div class="limiter">
+
+            <div class="container-login100" >
+
+                <div class="wrap-login100 p-t-190 p-b-30">
+
+                    <!--  <form class="login100-form validate-form">-->
+
+                    <div class="login100-form-avatar">
+                        <img src="img/mechanics.png" alt="AVATAR">
+                    </div>
+
+                    <span class="login100-form-title p-t-20 p-b-45">
+                        Sign up
+                    </span>
+
+                    <div class="wrap-input100 validate-input m-b-10">
+                        <input class="input100" type="text" name="username" placeholder="Username" id="username">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-user"></i>
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-10">
+                        <input class="input100" type="text" name="email" placeholder="Email" id="email">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-envelope"></i>
+                        </span>
+                    </div>
+                    <div class="wrap-input100 validate-input m-b-10">
+                        <input class="input100" type="text" name="nphone" placeholder="NumberPhone" id="nphone">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-phone"></i>
+                        </span>
+                    </div>
+                    <div class="wrap-input100 validate-input m-b-10">
+                        <input class="input100" type="password" name="pass1" placeholder="Password" id="pass1">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                    </div>
+                    <div class="wrap-input100 validate-input m-b-10">
+                        <input class="input100" type="password" name="pass2" placeholder="Comfirm Password" id="pass2">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                    </div>
+
+                    <div class="container-login100-form-btn p-t-10">
+                        <button id="submit" class="login100-form-btn">
+                            Sign up
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="text-center t02 w-full">
+                        <a class="txt1" href="#">
+                            Or Sign up Using
+
+                        </a>
+                    </div>
+                    <div class="flex-c-m">
+                        <a href="#" class="login100-social-item bg1">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+
+                        <a href="#" class="login100-social-item bg3" onclick="google()">
+                            <i class="fa fa-google"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </ons-page>
+
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyB6QMhAaE3oktdyy8deswQNQIw4cwPq-W4",
+            authDomain: "fixit-app-e3546.firebaseapp.com",
+            databaseURL: "https://fixit-app-e3546.firebaseio.com",
+            projectId: "fixit-app-e3546",
+            storageBucket: "fixit-app-e3546.appspot.com",
+            messagingSenderId: "139817871220",
+            appId: "1:139817871220:web:b634b75fb562dcd2"
+        };
+        // Initialize Firebase
+
+        firebase.initializeApp(firebaseConfig);
+        var firestore = firebase.firestore();
+        const saveButton = document.querySelector("#submit");
+
+        saveButton.addEventListener("click", function () {
+            const username_text = username.value;
+            const email_text = email.value;
+            const nphone_text = nphone.value;
+            const password_text = pass1.value;
+
+
+            firebase.auth().createUserWithEmailAndPassword(email_text, password_text).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+
+                console.log(error);
+            }).then(function (sendEmailVerify) {
+                if (sendEmailVerify === false) {
+                    return false
+                } else {
+                    firebase.auth().currentUser.sendEmailVerification();
+
+                    firestore.collection("Users").get().then(function (querySnapshot) {
+
+                        firestore.collection('Users').doc(email_text).set({
+
+                            user: username_text,
+                            email: email_text,
+                            nphone: nphone_text
+
+
+
+
+                        }).then(function () {
+                            console.log("Status saved!");
+
+                            window.location.href = "sign-in.html";
+                        }).catch(function (error) {
+                            console.log("Got an Error: ", error);
+
+                        });
+                    });
+                    return true;
+                }
+
+            })
+
+        });
+
+
+
+    </script>
+
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
