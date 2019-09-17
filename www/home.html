@@ -102,7 +102,7 @@
           <ons-card id="map" style="width: 95%; height : 120%">
 
             <script src="js/home-map.js"></script>
-          
+
           </ons-card>
         </ons-page>
       </template>
@@ -224,8 +224,8 @@
             </div>
           </div>
           <!--============ link chat css ==============-->
-            <link rel="stylesheet" href="css/chat.css">
-            <script src="js/chat.js"></script>
+          <link rel="stylesheet" href="css/chat.css">
+          <script src="js/chat.js"></script>
         </ons-page>
       </template>
       <!-- alert เรียกซ่อม  -->
@@ -294,8 +294,9 @@
   <template id="tab2.html">
     <ons-page id="Tab2">
       <ons-card>
-
-        <center><img src="img/coin.png" style="width: 60px;"> &nbsp; 200</center>
+        <div class="con">
+          <center style="font-size: 40px;"><img src="img/coin.png" style="width: 60px;">&nbsp; 200 </center>
+        </div>
         <ons-card style="background-color: #a5cec3;">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -306,31 +307,32 @@
           <hr>
 
           <div class="input-group">
-            <span class="input-group-text" style="font-size: 18px;">จำนวนเหรียญ &nbsp;</span>
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">เลือกจำนวนเหรียญ</button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">10 บาท (150 coins)</a>
-                <a class="dropdown-item" href="#">20 บาท (250 coins)</a>
-                <a class="dropdown-item" href="#">50 บาท (450 coins)</a>
-              </div>
-            </div>
+            <span class="input-group-text" style="font-size: 14px;">จำนวนเหรียญ &nbsp;</span>
+            <select id="coin" class="mdb-select md-form" style="font-size: 14px;">
+              <option value="" disabled selected>เลือกจำนวน</option>
+              <option value="150">10 บาท (150 coins)</option>
+              <option value="250">20 บาท (250 coins)</option>
+              <option value="500">50 บาท (500 coins)</option>
+            </select>
+
+            <script>
+              console.log();
+
+            </script>
           </div>
         </ons-card>
         <center>
           <section style="padding: 10px">
-            <button type="button" class="btn btn-danger">ยกเลิก</button>
+            <button type="button" class="btn btn-danger" onclick="getCoin()">ยกเลิก</button>
             <button type="button" class="btn btn-success" onclick="createAlertDialog1()">ตกลง</button>
-
           </section>
         </center>
       </ons-card>
+
       <template id="alert-dialog1.html">
         <ons-alert-dialog id="my-alert-dialog1" modifier="rowfooter">
           <div class="alert-dialog-title">แสดงข้อความนี้ให้ช่างซ่อม กรอกรหัสยืนยันส่วนลด</div>
           <div class="alert-dialog-content">
-
             <input type="password" aria-label="First name" class="form-control">
           </div>
           <div class="alert-dialog-footer">
@@ -339,10 +341,30 @@
           </div>
         </ons-alert-dialog>
       </template>
+
       <script>
+        function getCoin() {
+
+          firestore.collection("Users").get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data().coin);
+
+            });
+          });
+
+
+          var coin = document.getElementById("coin").value;
+          var coin = localStorage.setItem('coin', coin)
+          var getCoin = localStorage.getItem("coin");
+          const ncoin = parseInt(getCoin);
+          console.log("Coins:" + getCoin);
+
+        }
+
+
         var createAlertDialog1 = function () {
           var dialog = document.getElementById('my-alert-dialog1');
-
           if (dialog) {
             dialog.show();
           } else {
@@ -352,7 +374,6 @@
               });
           }
         };
-
         var hideAlertDialog1 = function () {
           document
             .getElementById('my-alert-dialog1')
@@ -385,9 +406,23 @@
     <ons-page id="tab4">
       <!-- crad profile -->
       <ons-card>
-        <center> <img src="img/user.png" alt="Onsen UI" style="width: 35%">
-          <div class="title" style="font-size: 25px">
-            สมยุทธ์ &nbsp; ลาพักงาน
+        <script>
+          document.getElementById("displayname").innerHTML = localStorage.getItem("displayName");
+          var img = document.createElement('img');
+          img.src = localStorage.getItem("photoURL");
+          document.getElementById('profile-pic').appendChild(img);
+        </script>
+        <center>
+            <div id="profile-pic" style="border-radius: 50%">
+            </div>
+          <img src="" alt="" srcset="">
+          
+
+          </div>
+          <!-- <img src="img/user.png" alt="Onsen UI" style="width: 35%"> -->
+          <div class="title" style="font-size: 25px" id="displayname">
+            <!-- สมยุทธ์ &nbsp; ลาพักงาน -->
+
           </div>
         </center>
       </ons-card>
@@ -465,91 +500,92 @@
 
     }
 
- 
+
 
     // const preObject = document.getElementById('chat2');
 
-    
-// function showdata() {
-  var firebaseRef=firebase.database().ref('Chat/');
+
+    // function showdata() {
+    var firebaseRef = firebase.database().ref('Chat/');
     // var firebaseRefList = firebaseRef.child('chat1');
-    firebaseRef.on('value',snap => console.log(snap.val()));
+    firebaseRef.on('value', snap => console.log(snap.val()));
 
-// }
-// =================== เพิ่ม ห้องแชทใหม่ ของ  customer คนใหม่และร้านซ่อมใหม่ ===========================
-// var ref = firebase.database().ref("Chat");
-// var ChatRef = ref.push();
-// console.log("Chat key", ChatRef.key);
-// var ChatRef = ref.push(
-//   {
-//     Customer : "สมใจ สุดดจัด",
-//     NameStor : "Creamstore"
-//   }
-// );
+    // }
+    // =================== เพิ่ม ห้องแชทใหม่ ของ  customer คนใหม่และร้านซ่อมใหม่ ===========================
+    // var ref = firebase.database().ref("Chat");
+    // var ChatRef = ref.push();
+    // console.log("Chat key", ChatRef.key);
+    // var ChatRef = ref.push(
+    //   {
+    //     Customer : "สมใจ สุดดจัด",
+    //     NameStor : "Creamstore"
+    //   }
+    // );
 
-// var MessagesRef = ChatRef.child('Message');
-// // Create a new ref and log it’s push key
-// var msg_Ref = MessagesRef.push();
-// console.log("msg key", msg_Ref.key);
-// // Create a new ref and save data to it in one step
-// var msg_Ref = MessagesRef.push({
-//  who : "สมใจ สุดดจัด",
-//  text : "I eat too much ice cream"
-// });
-    
-
-
-// =================== เพิ่มการ text ของห้องแชทเก่า  =========================== 
-
-// var ref = firebase.database().ref("Chat");
-// var ChatRef = ref.on().get();
-// var ChatRef = ref.push();
-// console.log("Chat key", ChatRef.key);
-// var who = {
-//     Customer : "สมใจ สุดดจัด",
-//     NameStor : "Creamstore"
-//   };
-
-// var ChatRef = ref.push();
-
-// var ChatRef_key = ChatRef.key;
-// var MessagesRef = ChatRef.child("Message");
-// // Create a new ref and log it’s push key
-// var msg_Ref = MessagesRef.push();
-// console.log("msg key", msg_Ref.key);
-// // Create a new ref and save data to it in one step
-// var msg_Ref = MessagesRef.push({
-//  who : "สมใจ สุดดจัด",
-//  text : "I eat too much ice cream"
-// });
-//=======================================================================================================
+    // var MessagesRef = ChatRef.child('Message');
+    // // Create a new ref and log it’s push key
+    // var msg_Ref = MessagesRef.push();
+    // console.log("msg key", msg_Ref.key);
+    // // Create a new ref and save data to it in one step
+    // var msg_Ref = MessagesRef.push({
+    //  who : "สมใจ สุดดจัด",
+    //  text : "I eat too much ice cream"
+    // });
 
 
-// var ref =  firebase.database().ref('Chat');
-// var chats = ref.push();
-// var chatsRef = chats.key;
 
-// var chatsRefs =localStorage.setItem('chatsRef::',chats.key);
-// var messanger = {customer : "ภัศรา เรืองรรัตน์", namestore :"CreamStore"}
-// ref.child(chatsRef).set(messanger);
+    // =================== เพิ่มการ text ของห้องแชทเก่า  =========================== 
 
-// // var chatsRef_setLocalStorage =localStorage.setItem('chatsRef::',chats.key);
-// // var chatsRef_getLocalStorage = localStorage.getItem("chatsRef_setLocalStorage");
-// // console.log("chatsRef ::"+chatsRef_getLocalStorage );
+    // var ref = firebase.database().ref("Chat");
+    // var ChatRef = ref.on().get();
+    // var ChatRef = ref.push();
+    // console.log("Chat key", ChatRef.key);
+    // var who = {
+    //     Customer : "สมใจ สุดดจัด",
+    //     NameStor : "Creamstore"
+    //   };
 
-// var messagesRef = chats.child("messager");
-// var messageRef = messagesRef.push();
+    // var ChatRef = ref.push();
 
-var timestamp = new Date().toString();
-// var message = {msg :"hi hihihi",who:"สมใจ สุดดจัด",timestamp:timestamp};
-var message2 = {msg :"hii",who:"เอ้ สุดดจัด",timestamp:timestamp};
-// messagesRef.child(messageRef.key).set(message);
+    // var ChatRef_key = ChatRef.key;
+    // var MessagesRef = ChatRef.child("Message");
+    // // Create a new ref and log it’s push key
+    // var msg_Ref = MessagesRef.push();
+    // console.log("msg key", msg_Ref.key);
+    // // Create a new ref and save data to it in one step
+    // var msg_Ref = MessagesRef.push({
+    //  who : "สมใจ สุดดจัด",
+    //  text : "I eat too much ice cream"
+    // });
+    //=======================================================================================================
 
 
-// var chatsRefgg = localStorage.getItem("chatsRefs");
+    // var ref =  firebase.database().ref('Chat');
+    // var chats = ref.push();
+    // var chatsRef = chats.key;
 
-var messageRef1 = firebase.database().ref('Chat/-LoH2iBG5vSVbE4JP969/messager');
-messageRef1.push(message2)
+    // var chatsRefs =localStorage.setItem('chatsRef::',chats.key);
+    // var messanger = {customer : "ภัศรา เรืองรรัตน์", namestore :"CreamStore"}
+    // ref.child(chatsRef).set(messanger);
+
+    // // var chatsRef_setLocalStorage =localStorage.setItem('chatsRef::',chats.key);
+    // // var chatsRef_getLocalStorage = localStorage.getItem("chatsRef_setLocalStorage");
+    // // console.log("chatsRef ::"+chatsRef_getLocalStorage );
+
+    // var messagesRef = chats.child("messager");
+    // var messageRef = messagesRef.push();
+
+    var timestamp = new Date().toString();
+    // var message = {msg :"hi hihihi",who:"สมใจ สุดดจัด",timestamp:timestamp};
+    var message2 = { msg: "hii", who: "เอ้ สุดดจัด", timestamp: timestamp };
+    // messagesRef.child(messageRef.key).set(message);
+
+
+    // var chatsRefgg = localStorage.getItem("chatsRefs");
+
+    // var messageRef1 = firebase.database().ref('Chat/-LoH2iBG5vSVbE4JP969/messager');
+    // messageRef1.push(message2)
+
 
   </script>
 
@@ -568,9 +604,9 @@ messageRef1.push(message2)
       font-family: 'Pridi', serif;
     }
 
-    .center {
+    .con {
       font-family: 'Pridi', serif;
-
+      font-size: 25px;
     }
 
     .right {
@@ -585,7 +621,6 @@ messageRef1.push(message2)
       color: gray;
     }
   </style>
-
 </body>
 
 </html>
