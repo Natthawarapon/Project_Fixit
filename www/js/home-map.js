@@ -29,9 +29,9 @@ firestore.collection("Technicians").get().then(function (querySnapshot) {
     // doc.data() is never undefined for query doc snapshots
     console.log(doc.id, " => ", doc.data());
 
-    // console.log("lat :" + doc.data().latitude, "long : " + doc.data().longitude);
-    var c = 'ttt';
-    L.marker([doc.data().longitude, doc.data().latitude], { icon: ratIcon }).addTo(map).bindPopup(
+    console.log("lat :" + doc.data().latitude, "long : " + doc.data().longitude);
+    
+    L.marker([doc.data().latitude, doc.data().longitude], { icon: ratIcon }).addTo(map).bindPopup(
       " ชื่อร้าน : " + doc.data().namestore + ";" + '<a id="push-button" onclick="pushPage(' + "'" + doc.data().namestore + "'" + ')">' + "Click" + '</a>').openPopup();
 
 

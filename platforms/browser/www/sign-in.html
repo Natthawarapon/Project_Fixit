@@ -86,9 +86,6 @@
 						</button>
 					</div>
 
-
-
-
 					<div class="text-center t02 w-full">
 						<a class="txt1" href="#">
 							Or Sign in Using
@@ -118,32 +115,8 @@
 	</ons-page>
 
 	<script>
-		//login with google
-		function google() {
-			var provider = new firebase.auth.GoogleAuthProvider();
-			provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-			firebase.auth().signInWithRedirect(provider);
-			//function google
-			firebase.auth().getRedirectResult().then(function (result) {
-				if (result.credential) {
-					// This gives you a Google Access Token. You can use it to access the Google API.
-					var token = result.credential.accessToken;
-					// ...
-				}
-				// The signed-in user info.
-				var user = result.user;
-			}).catch(function (error) {
-				// Handle Errors here.
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				// The email of the user's account used.
-				var email = error.email;
-				// The firebase.auth.AuthCredential type that was used.
-				var credential = error.credential;
-				// ...
-			});
-		}
 
+	
 		//login username
 		var login = function () {
 			var username = document.getElementById('username').value;
@@ -159,21 +132,27 @@
 
 		};
 
-		// Fackbook login
+
 		function facebook() {
 			var provider = new firebase.auth.FacebookAuthProvider();
-			// firebase.auth().signInWithRedirect(provider);
+			provider.addScope('user_birthday');
+			firebase.auth().languageCode = 'fr_FR';
+
 			firebase.auth().signInWithPopup(provider).then(function (result) {
+
 				// This gives you a Facebook Access Token. You can use it to access the Facebook API.
 				var token = result.credential.accessToken;
-				// The signed-in user info.
+
+				// ...
 				var user = result.user;
 				// ...
 				console.log(user);
-				
-				var displayName = localStorage.setItem('displayName',user.displayName);
-				var photoURL = localStorage.setItem('photoURL',user.photoURL);
 
+				var displayName = localStorage.setItem('displayName', user.displayName);
+				var photoURL = localStorage.setItem('photoURL', user.photoURL + "?height=200");
+
+				// The signed-in user info.
+				var user = result.user;
 			}).catch(function (error) {
 				// Handle Errors here.
 				var errorCode = error.code;
@@ -184,7 +163,40 @@
 				var credential = error.credential;
 				// ...
 			});
-		}
+
+    }
+        //login with google
+        function google() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+            firebase.auth().signInWithRedirect(provider);
+
+            //function google
+            firebase.auth().getRedirectResult().then(function (result) {
+                if (result.credential) {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    var token = result.credential.accessToken;
+                    // ...
+					var user = result.user;
+					var displayName = localStorage.setItem('displayName', user.displayName);
+				var photoURL = localStorage.setItem('photoURL', user.photoURL + "?height=200");
+                }
+                // The signed-in user info.
+                var user = result.user;
+            }).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+            });
+        }
+
+		
+
 
 		firebase.auth().onAuthStateChanged(function (user) {
 			if (user) {
@@ -196,9 +208,6 @@
 				var providerData = user.providerData;
 
 
-				//document.getElementById('detail-user').textContent = JSON.stringify(user);
-
-				//Send user to home.html
 				window.location.href = 'index.html';
 			}
 		});

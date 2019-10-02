@@ -53,38 +53,40 @@
 </head>
 
 <body>
-  <!--  Page  -->
-  <ons-page>
-    <!--   toolbar  -->
-    <ons-toolbar style="background-color: #FFE200 ">
-      <div class="center">Fix it</div>
-      <div class="right">
-        <ons-toolbar-button>
-          <ons-icon icon="fa-sign-out-alt" style="color: black" onclick="logout()"></ons-icon>
-        </ons-toolbar-button>
-      </div>
-    </ons-toolbar>
-    <!--  //toolbar  -->
+  <ons-navigator swipeable id="myNavigator1">
+    <!--  Page  -->
+    <ons-page>
+      <!--   toolbar  -->
+      <ons-toolbar style="background-color: #FFE200 ">
+        <div class="center">Fix it</div>
+        <div class="right">
+          <ons-toolbar-button>
+            <ons-icon icon="fa-sign-out-alt" style="color: black" onclick="logout()"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+      <!--  //toolbar  -->
 
-    <!--   toolbar  -->
-    <ons-tabbar style="background-color: #FFE200" swipeable position="under">
-      <ons-tab style="background-color: #FFE200" page="tab1.html" label="Map"
-        icon="fa-map-marked-alt, material:fa-map-marked-alt" active>
-      </ons-tab>
-      <ons-tab style="background-color: #FFE200" page="tab2.html" label="Coins" icon="fa-coins" active-icon="fa-coins">
-      </ons-tab>
-      <ons-tab style="background-color: #FFE200" page="tab3.html" label="Notification" icon="fa-history"
-        active-icon="fa-history">
-      </ons-tab>
-      <ons-tab style="background-color: #FFE200" page="tab4.html" label="Setttings" icon="md-settings"
-        active-icon="md-settings">
-      </ons-tab>
+      <!--   toolbar  -->
+      <ons-tabbar style="background-color: #FFE200" swipeable position="under">
+        <ons-tab style="background-color: #FFE200" page="tab1.html" label="Map"
+          icon="fa-map-marked-alt, material:fa-map-marked-alt" active>
+        </ons-tab>
+        <ons-tab style="background-color: #FFE200" page="tab2.html" label="Coins" icon="fa-coins"
+          active-icon="fa-coins">
+        </ons-tab>
+        <ons-tab style="background-color: #FFE200" page="tab3.html" label="Notification" icon="fa-history"
+          active-icon="fa-history">
+        </ons-tab>
+        <ons-tab style="background-color: #FFE200" page="tab4.html" label="Setttings" icon="md-settings"
+          active-icon="md-settings">
+        </ons-tab>
 
-    </ons-tabbar>
-    <!-- //toolbar -->
-  </ons-page>
-  <!--  //page ========= -->
-
+      </ons-tabbar>
+      <!-- //toolbar -->
+    </ons-page>
+    <!--  //page ========= -->
+  </ons-navigator>
   <!--  ======================================================tab1 >> Maps ===================================================== -->
   <template id="tab1.html">
     <ons-page id="Tab1">
@@ -111,15 +113,15 @@
       <template id="detailStore.html">
         <ons-page id="test2">
 
-          <ons-toolbar>
+          <ons-toolbar style="background-color: #FFE200">
             <div class="left">
               <ons-back-button>Back</ons-back-button>
             </div>
-            <div class="center"></div>
+            <div class="center"> รายละเอียดร้าน</div>
           </ons-toolbar>
           <ons-card>
             <!-- ==========Carousal========== -->
-            <ons-carousel fullscreen swipeable auto-scroll overscrollable id="carousel" style="height: 250px;">
+            <ons-carousel fullscreen swipeable auto-scroll overscrollable id="carousel" style="height: 170px;">
               <ons-carousel-item
                 style="background: url('https://www.thairath.co.th/media/4DQpjUtzLUwmJZZPD15TX0i2J7gu4aL4Jy5bOehYBSEJ.jpg') no-repeat center; background-size: contain;">
 
@@ -138,11 +140,22 @@
               <section style="padding: 10px">
                 <button type="button" class="btn btn-outline-success"><i class="fa fa-phone"
                     onclick="createAlertDialog()"></i></button>
-                <button type="button" class="btn btn-outline-warning" id="chatclick"><i class="fa fa-comment"
+                <button type="button" class="btn btn-outline-warning chatclick" id="chatclick"><i class="fa fa-comment"
                     onclick="chat()"></i></button>
                 <button type="button" class="btn btn-outline-primary" id="btn-map" onclick="myNavFunc()"><i
                     class="fa fa-compass"></i></button>
               </section>
+              <style>
+                  button.sticky {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 0;
+                    background-color: yellow;
+                    padding: 50px;
+                    font-size: 20px;
+                  }
+                  </style>
+              <button type="button" class="sticky btn-outline-primary" id="btn-map" >
             </center>
 
             <ons-card style="background-color: #cce3f0;">
@@ -152,7 +165,95 @@
               </div>
               <ons-list-item>
                 <div class="right" style="font-size: 12px;">
-                  สถานะร้าน &nbsp; <i class="fa fa-circle" style="color: yellow;"></i>
+
+                  สถานะร้าน &nbsp; <i class="fa fa-circle" id="status"></i>
+                  <script>
+
+                    var namestore_getstatus = localStorage.getItem("namestore");
+
+
+                    var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
+                    firebaseRef.get().then(function (doc) {
+                      if (doc.data().status == "on") {
+                        document.getElementById('status').innerHTML = "Open";
+                        document.getElementById("status").style.color = "#008000";
+
+                       
+
+                      } else {
+                        document.getElementById('status').innerHTML = "Close";
+                        document.getElementById("status").style.colorr = "#FF0000";
+                       
+                      }
+
+
+
+                    });
+
+
+
+                  var firestoreRef =  firestore.collection("Technicians").doc(namestore_getstatus)
+                      .onSnapshot(function (doc) {
+                        var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+                        console.log(source, " data: ", doc.data().status);
+
+                        var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
+                    firebaseRef.get().then(function (doc) {
+                      if (doc.data().status == "on") {
+                        document.getElementById('status').innerHTML = "Open";
+                        document.getElementById("status").style.color = "#008000";
+
+                      } else {
+                        document.getElementById('status').innerHTML = "Close";
+                        document.getElementById("status").style.color = "#FF0000";
+                       
+                      }
+
+
+
+                    });
+
+                      });
+
+                    // firestore.collection("Technicians").doc(namestore_getstatus).onSnapshot(snapshot => {
+
+                    //   snapshot.docChanges(), function () {
+                    //     var change = this
+                    //     if (change.type === "added") {
+                    //       console.log(change.doc.data());
+                    //       //show data when is added, apply here your function of callback;
+                    //     }
+                    //     if (change.type === "modified") {
+                    //       console.log(change.doc.data());
+                    //       //show data when is modified, apply here your function of callback;
+                    //     }
+                    //     if (change.type === "removed") {
+                    //       //when is removed, apply here your function of callback;
+                    //     }
+                    //   }
+
+                    // })
+                    //   function loadStatus() {
+                    //     firestore.collection("Technicians").where("state", "==", namestore_getstatus)
+                    // .onSnapshot(function (snapshot) {
+                    //   snapshot.docChanges().forEach(function (change) {
+                    //     console.log(change);
+
+                    //     if (change.type === "added") {
+                    //       console.log("New city: ", change.doc.data());
+                    //     }
+                    //     if (change.type === "modified") {
+                    //       console.log("Modified city: ", change.doc.data());
+
+                    //     }
+                    //     if (change.type === "removed") {
+                    //       console.log("Removed city: ", change.doc.data());
+                    //     }
+                    //   });
+                    // });
+                    //   }
+
+                  </script>
                 </div>
                 <!-- <div class="right">
                     <ons-switch checked></ons-switch>
@@ -203,25 +304,32 @@
       <template id="chat.html">
         <ons-page id="test2">
 
-          <ons-toolbar>
+          <ons-toolbar style="background-color: #FFE200">
             <div class="left">
               <ons-back-button>Back</ons-back-button>
             </div>
-            <div class="center"></div>
+            <div id="namestorechat" class="center"></div>
+            <script>
+              var namestorechat = localStorage.getItem("namestore");
+              document.getElementById('namestorechat').innerHTML = namestorechat;
+            </script>
           </ons-toolbar>
           <div class="col-sm-3 col-sm-offset-4 frame">
             <ul></ul>
             <div>
-              <div class="msj-rta macro">
+              <div class="msj-rta macro1">
                 <div class="text text-r" style="background:whitesmoke !important">
                   <input class="mytext" placeholder="Type a message" />
                 </div>
-
               </div>
               <div style="padding:10px;">
-                <span class="glyphicon glyphicon-share-alt"></span>
+                <!-- <span class="glyphicon glyphicon-share-alt"></span> -->
+                <span class="input-group-btn">
+                  <button class="btn btn-primary btn-md send" id="btn-chat">Send</button>
+                </span>
               </div>
             </div>
+
           </div>
           <!--============ link chat css ==============-->
           <link rel="stylesheet" href="css/chat.css">
@@ -315,10 +423,6 @@
               <option value="500">50 บาท (500 coins)</option>
             </select>
 
-            <script>
-              console.log();
-
-            </script>
           </div>
         </ons-card>
         <center>
@@ -411,12 +515,14 @@
           var img = document.createElement('img');
           img.src = localStorage.getItem("photoURL");
           document.getElementById('profile-pic').appendChild(img);
+          console.log(img.src);
+
         </script>
         <center>
-            <div id="profile-pic" style="border-radius: 50%">
-            </div>
-          
-          
+          <div id="profile-pic">
+          </div>
+          <img src="" alt="" srcset="">
+
 
           </div>
           <!-- <img src="img/user.png" alt="Onsen UI" style="width: 35%"> -->
@@ -454,9 +560,9 @@
       if (event.index == 0) {
         console.log('map clicked');
         // get data for map screen  
-        if (document.getElementById('chatclick').clicked == true) {
-          alert("button was clicked");
-        }
+        // if (document.getElementById('chatclick').clicked == true) {
+        //   alert("button was clicked");
+        // }
 
       } else if (event.index == 1) {
         console.log('coins clicked');
@@ -481,10 +587,13 @@
   <script>
     //map pushPage to Detail Store
     function pushPage(name) {
-      document.querySelector('#myNavigator').pushPage('detailStore.html');
+      document.querySelector('#myNavigator1').pushPage('detailStore.html');
+
       firestore.collection("Technicians").doc(name).get().then(function (doc) {
 
-        console.log("nameDatail : " + name);
+        var namestoreclick = localStorage.setItem('namestore', name);
+        var getnamestorclick = localStorage.getItem("namestoreclick");
+
 
         document.getElementById('namestore').innerHTML = name;
         document.getElementById('address').innerHTML = doc.data().address;
@@ -495,8 +604,8 @@
     }
 
     function chat() {
-      document.querySelector('#myNavigator').pushPage('chat.html');
-      showdata();
+      document.querySelector('#myNavigator1').pushPage('chat.html');
+      // showdata();
 
     }
 
