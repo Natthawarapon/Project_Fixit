@@ -4,9 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="viewport"
-    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <!-- <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Material +++ icon -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
@@ -96,14 +100,43 @@
 
       <template id="test1.html">
         <ons-page id="test1">
-          <center style="background-color: white">
 
-            <!--<ons-button style="background-color: rgb(56, 56, 54)">List</ons-button>-->
-          </center>
 
-          <ons-card id="map" style="width: 95%; height : 120%">
 
-            <script src="js/home-map.js"></script>
+          <ons-card>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="title" style="font-size: 20px">Pull Hook</div>
+                  <div class="content" style="font-size: 15px">Simple "pull to refresh" functionality to update data.
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <center>
+                    <button type="button" class="btn btn-outline-success"><i class="fa fa-phone"
+                        onclick="createAlertDialog()"></i></button>
+                    <button type="button" class="btn btn-outline-warning " id="chatclick"><i class="fa fa-comment"
+                        onclick="chat()"></i></button>
+                  </center>
+                </div>
+              </div>
+            </div>
+
+
+
+
+          </ons-card>
+
+
+          <div class="content" id="map" style="width: 100%; height: 100%"> </div>
+
+
+
+
+
+          <!-- <ons-card id="map" style="width: 95%; height : 120% ;" > -->
+
+          <script src="js/home-map.js"></script>
 
           </ons-card>
         </ons-page>
@@ -138,17 +171,17 @@
 
             <center>
               <section style="padding: 10px">
-                <button type="button" class="btn btn-outline-success"><i class="fa fa-phone"
-                    onclick="createAlertDialog()"></i></button>
-                <button type="button" class="btn btn-outline-warning chatclick" id="chatclick"><i class="fa fa-comment"
-                    onclick="chat()"></i></button>
-                <button type="button" class="btn btn-outline-primary" id="btn-map" onclick="myNavFunc()"><i
-                    class="fa fa-compass"></i></button>
+
+                <button type="button" id="requestFix" class="btn btn-lg btn-outline-danger" onclick="requestFix()">เรียกซ่อม&nbsp; <i
+                    class="material-icons">build</i></button>
+
+                <button type="button" class="btn btn-lg btn-outline-primary" id="btn-map" onclick="myNavFunc()">นำทาง
+                  &nbsp;<i class="fa fa-compass"></i></button>
               </section>
-              
+
             </center>
 
-            <ons-card style="background-color: #cce3f0;">
+            <ons-card style="background-color:  #d4d4d1;">
               <div class="title">
                 <p id="namestore" style="font-size: 16px"></p>
                 <p id="address" style="font-size: 12px; font-style: normal">
@@ -158,96 +191,78 @@
 
                   สถานะร้าน &nbsp; <i class="fa fa-circle" id="status"></i>
                   <script>
-
+                    //============================ เช็คสถานะร้าน ว่าเปิดหรือปิด ==================================================
                     var namestore_getstatus = localStorage.getItem("namestore");
-
-
                     var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
                     firebaseRef.get().then(function (doc) {
                       if (doc.data().status == "on") {
-                        document.getElementById('status').innerHTML = "Open";
+                        document.getElementById("status").innerHTML = "Open";
                         document.getElementById("status").style.color = "#008000";
 
-                       
+
 
                       } else {
-                        document.getElementById('status').innerHTML = "Close";
+                        document.getElementById("status").innerHTML = "Close";
                         document.getElementById("status").style.colorr = "#FF0000";
-                       
+
+                        
+
                       }
 
 
 
                     });
 
-
-
-                  var firestoreRef =  firestore.collection("Technicians").doc(namestore_getstatus)
+                    var firestoreRef = firestore.collection("Technicians").doc(namestore_getstatus)
                       .onSnapshot(function (doc) {
                         var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
                         console.log(source, " data: ", doc.data().status);
 
                         var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
-                    firebaseRef.get().then(function (doc) {
-                      if (doc.data().status == "on") {
-                        document.getElementById('status').innerHTML = "Open";
-                        document.getElementById("status").style.color = "#008000";
-
-                      } else {
-                        document.getElementById('status').innerHTML = "Close";
-                        document.getElementById("status").style.color = "#FF0000";
-                       
-                      }
-
-
-
-                    });
+                        firebaseRef.get().then(function (doc) {
+                          if (doc.data().status == "on") {
+                            document.getElementById('status').innerHTML = "Open";
+                            document.getElementById("status").style.color = "#008000";
+                          
+                            document.getElementById("requestFix").disabled = false;
+                          } else {
+                            document.getElementById('status').innerHTML = "Close";
+                            document.getElementById("status").style.color = "#FF0000";
+                           
+                            document.getElementById("requestFix").disabled = true;
+                          }
+                          
+                        
+                        });
 
                       });
+                    ////=============================ฟังก์ชั่น เรียกช่างซ่อมรถ =========================================================
+                   
+                  
+                    function requestFix() {
+                      var CusName = localStorage.getItem("displayName");
+                      var namestore = localStorage.getItem("namestore");
 
-                    // firestore.collection("Technicians").doc(namestore_getstatus).onSnapshot(snapshot => {
+                      firebase.firestore().collection('requestFix').add({
+                        customer: CusName,
+                        namestore: namestore,
+                        request: 1,
+                        accept: 0,
+                        done: 0
+                      }).then(function (docRef) {
+                        firebase.firestore().collection('requestFix').doc(docRef.id).update({
+                          requestFixKey: docRef.id
 
-                    //   snapshot.docChanges(), function () {
-                    //     var change = this
-                    //     if (change.type === "added") {
-                    //       console.log(change.doc.data());
-                    //       //show data when is added, apply here your function of callback;
-                    //     }
-                    //     if (change.type === "modified") {
-                    //       console.log(change.doc.data());
-                    //       //show data when is modified, apply here your function of callback;
-                    //     }
-                    //     if (change.type === "removed") {
-                    //       //when is removed, apply here your function of callback;
-                    //     }
-                    //   }
+                        })
+                        // var logRef = docRef.id
+                        // return localStorage.setItem('logRef', logRef);
 
-                    // })
-                    //   function loadStatus() {
-                    //     firestore.collection("Technicians").where("state", "==", namestore_getstatus)
-                    // .onSnapshot(function (snapshot) {
-                    //   snapshot.docChanges().forEach(function (change) {
-                    //     console.log(change);
-
-                    //     if (change.type === "added") {
-                    //       console.log("New city: ", change.doc.data());
-                    //     }
-                    //     if (change.type === "modified") {
-                    //       console.log("Modified city: ", change.doc.data());
-
-                    //     }
-                    //     if (change.type === "removed") {
-                    //       console.log("Removed city: ", change.doc.data());
-                    //     }
-                    //   });
-                    // });
-                    //   }
-
+                      })
+                      showModal();
+                    }
                   </script>
                 </div>
-                <!-- <div class="right">
-                    <ons-switch checked></ons-switch>
-                  </div> -->
+
               </ons-list-item>
               </div>
             </ons-card>
@@ -255,7 +270,7 @@
           <!-- ons-cord review -->
           <ons-card>
             <p style="font-size: 25px">Review</p>
-            <ons-card style="background-color: #cfe779;">
+            <ons-card style="background-color: #ffe96d ;">
 
               <div class="title">
                 <p style="font-size: 16px">นายเอ้ นามสมมติ</p>
@@ -263,7 +278,7 @@
               </div>
 
             </ons-card>
-            <ons-card style="background-color: #cfe779;">
+            <ons-card style="background-color: #ffe96d;">
 
               <div class="title">
                 <p style="font-size: 16px">นางสาวพลัด นามสมมติ</p>
@@ -273,22 +288,32 @@
             </ons-card>
           </ons-card>
 
-          <script>
-            function myNavFunc() {
 
-              var long = 98.3370182;
-              var lat = 7.8947922;
-              // If it's an iPhone..
-              if ((navigator.platform.indexOf("iPhone") != -1)
-                || (navigator.platform.indexOf("iPod") != -1)
-                || (navigator.platform.indexOf("iPad") != -1)
-                || (navigator.platform.indexOf("Android") != -1))
-                window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
-              else
-                window.open('http://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
-            }
-          </script>
+
+      <!-- Loading -->
+      <ons-modal direction="up">
+          <div style="text-align: center">
+            <p>
+              <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
+            </p>
+          </div>
+        </ons-modal>
+        <script>
+          ////========================== showModal =======================================
+          function showModal() {
+            
+            var modal = document.querySelector('ons-modal');
+            modal.show();
+            setTimeout(function () {
+              modal.hide();
+            }, 3000);
+
+            
+          }
+  
+        </script>
         </ons-page>
+
       </template>
       <!-- =========================Chat page =========================================== -->
       <template id="chat.html">
@@ -326,65 +351,10 @@
           <script src="js/chat.js"></script>
         </ons-page>
       </template>
-      <!-- alert เรียกซ่อม  -->
-      <template id="alert-dialog.html">
-        <ons-alert-dialog id="my-alert-dialog" modifier="rowfooter">
-          <div class="alert-dialog-title">คุณต้องการเรียกซ่อม</div>
-          <div class="alert-dialog-content">
-            ถ้าคุณต้องการเรียกซ่อมให้ กด "เรียกซ่อม" และคุณจะได้รับเหรียญเมื่อทำการซ่อมเสร็จ
-          </div>
-          <div class="alert-dialog-footer">
-            <ons-alert-dialog-button onclick="hideAlertDialog()">ยกเลิก</ons-alert-dialog-button>
-            <ons-alert-dialog-button onclick="showModal()">เรียกซ่อม</ons-alert-dialog-button>
-          </div>
-        </ons-alert-dialog>
-      </template>
-
-      <!-- Loading -->
-      <ons-modal direction="up">
-        <div style="text-align: center">
-          <p>
-            <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
-          </p>
-        </div>
-      </ons-modal>
+      
+      </script>
     </ons-page>
   </template>
-  <script>
-
-    var createAlertDialog = function () {
-      var dialog = document.getElementById('my-alert-dialog');
-
-      if (dialog) {
-        dialog.show();
-      } else {
-        ons.createElement('alert-dialog.html', { append: true })
-          .then(function (dialog) {
-            dialog.show();
-          });
-      }
-    };
-
-    var hideAlertDialog = function () {
-
-      document
-        .getElementById('my-alert-dialog')
-        .hide();
-
-    };
-
-    function showModal() {
-
-      document
-        .getElementById('my-alert-dialog')
-        .hide();
-      var modal = document.querySelector('ons-modal');
-      modal.show();
-      setTimeout(function () {
-        modal.hide();
-      }, 2000);
-    }
-  </script>
 
   <!--  ====================================================== // tab1 >> Maps ===================================================== -->
 
@@ -436,44 +406,7 @@
         </ons-alert-dialog>
       </template>
 
-      <script>
-        function getCoin() {
 
-          firestore.collection("Users").get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-              // doc.data() is never undefined for query doc snapshots
-              console.log(doc.id, " => ", doc.data().coin);
-
-            });
-          });
-
-
-          var coin = document.getElementById("coin").value;
-          var coin = localStorage.setItem('coin', coin)
-          var getCoin = localStorage.getItem("coin");
-          const ncoin = parseInt(getCoin);
-          console.log("Coins:" + getCoin);
-
-        }
-
-
-        var createAlertDialog1 = function () {
-          var dialog = document.getElementById('my-alert-dialog1');
-          if (dialog) {
-            dialog.show();
-          } else {
-            ons.createElement('alert-dialog1.html', { append: true })
-              .then(function (dialog) {
-                dialog.show();
-              });
-          }
-        };
-        var hideAlertDialog1 = function () {
-          document
-            .getElementById('my-alert-dialog1')
-            .hide();
-        };
-      </script>
     </ons-page>
   </template>
   <!--  ====================================================== // tab2 >> Coins ===================================================== -->
@@ -513,7 +446,6 @@
           </div>
           <img src="" alt="" srcset="">
 
-
           </div>
           <!-- <img src="img/user.png" alt="Onsen UI" style="width: 35%"> -->
           <div class="title" style="font-size: 25px" id="displayname">
@@ -540,8 +472,9 @@
     </ons-page>
   </template>
 
-  <!--  ====================================================== // tab4 >> Settings ===================================================== -->
 
+
+  <!--  ====================================================== // script all  ===================================================== -->
   <script>
 
 
@@ -575,7 +508,7 @@
   </script>
 
   <script>
-    //map pushPage to Detail Store
+    //==================================map pushPage to Detail Store ==================================
     function pushPage(name) {
       document.querySelector('#myNavigator1').pushPage('detailStore.html');
 
@@ -601,91 +534,78 @@
 
 
 
-    // const preObject = document.getElementById('chat2');
+    ////======================= ฟังก์ชันนำทาง =============================
+    function myNavFunc() {
+
+      var long = 98.3370182;
+      var lat = 7.8947922;
+      // If it's an iPhone..
+      if ((navigator.platform.indexOf("iPhone") != -1)
+        || (navigator.platform.indexOf("iPod") != -1)
+        || (navigator.platform.indexOf("iPad") != -1)
+        || (navigator.platform.indexOf("Android") != -1))
+        window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+      else
+        window.open('http://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+    }
+
+    ////========================== AlertDialog=======================================
+    var createAlertDialog = function () {
+      var dialog = document.getElementById('my-alert-dialog');
+
+      if (dialog) {
+        dialog.show();
+      } else {
+        ons.createElement('alert-dialog.html', { append: true })
+          .then(function (dialog) {
+            dialog.show();
+          });
+      }
+    };
+    ///========================== hideAlertDialog=======================================
+    var hideAlertDialog = function () {
+
+      document.getElementById('my-alert-dialog').hide();
+
+    };
+
+    ////========================= scriptหน้า Coins.html ==========================================================
+    function getCoin() {
+
+      firestore.collection("Users").get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data().coin);
+
+        });
+      });
 
 
-    // function showdata() {
-    var firebaseRef = firebase.database().ref('Chat/');
-    // var firebaseRefList = firebaseRef.child('chat1');
-    firebaseRef.on('value', snap => console.log(snap.val()));
+      var coin = document.getElementById("coin").value;
+      var coin = localStorage.setItem('coin', coin)
+      var getCoin = localStorage.getItem("coin");
+      const ncoin = parseInt(getCoin);
+      console.log("Coins:" + getCoin);
 
-    // }
-    // =================== เพิ่ม ห้องแชทใหม่ ของ  customer คนใหม่และร้านซ่อมใหม่ ===========================
-    // var ref = firebase.database().ref("Chat");
-    // var ChatRef = ref.push();
-    // console.log("Chat key", ChatRef.key);
-    // var ChatRef = ref.push(
-    //   {
-    //     Customer : "สมใจ สุดดจัด",
-    //     NameStor : "Creamstore"
-    //   }
-    // );
-
-    // var MessagesRef = ChatRef.child('Message');
-    // // Create a new ref and log it’s push key
-    // var msg_Ref = MessagesRef.push();
-    // console.log("msg key", msg_Ref.key);
-    // // Create a new ref and save data to it in one step
-    // var msg_Ref = MessagesRef.push({
-    //  who : "สมใจ สุดดจัด",
-    //  text : "I eat too much ice cream"
-    // });
+    }
 
 
-
-    // =================== เพิ่มการ text ของห้องแชทเก่า  =========================== 
-
-    // var ref = firebase.database().ref("Chat");
-    // var ChatRef = ref.on().get();
-    // var ChatRef = ref.push();
-    // console.log("Chat key", ChatRef.key);
-    // var who = {
-    //     Customer : "สมใจ สุดดจัด",
-    //     NameStor : "Creamstore"
-    //   };
-
-    // var ChatRef = ref.push();
-
-    // var ChatRef_key = ChatRef.key;
-    // var MessagesRef = ChatRef.child("Message");
-    // // Create a new ref and log it’s push key
-    // var msg_Ref = MessagesRef.push();
-    // console.log("msg key", msg_Ref.key);
-    // // Create a new ref and save data to it in one step
-    // var msg_Ref = MessagesRef.push({
-    //  who : "สมใจ สุดดจัด",
-    //  text : "I eat too much ice cream"
-    // });
-    //=======================================================================================================
-
-
-    // var ref =  firebase.database().ref('Chat');
-    // var chats = ref.push();
-    // var chatsRef = chats.key;
-
-    // var chatsRefs =localStorage.setItem('chatsRef::',chats.key);
-    // var messanger = {customer : "ภัศรา เรืองรรัตน์", namestore :"CreamStore"}
-    // ref.child(chatsRef).set(messanger);
-
-    // // var chatsRef_setLocalStorage =localStorage.setItem('chatsRef::',chats.key);
-    // // var chatsRef_getLocalStorage = localStorage.getItem("chatsRef_setLocalStorage");
-    // // console.log("chatsRef ::"+chatsRef_getLocalStorage );
-
-    // var messagesRef = chats.child("messager");
-    // var messageRef = messagesRef.push();
-
-    var timestamp = new Date().toString();
-    // var message = {msg :"hi hihihi",who:"สมใจ สุดดจัด",timestamp:timestamp};
-    var message2 = { msg: "hii", who: "เอ้ สุดดจัด", timestamp: timestamp };
-    // messagesRef.child(messageRef.key).set(message);
-
-
-    // var chatsRefgg = localStorage.getItem("chatsRefs");
-
-    // var messageRef1 = firebase.database().ref('Chat/-LoH2iBG5vSVbE4JP969/messager');
-    // messageRef1.push(message2)
-
-
+    var createAlertDialog1 = function () {
+      var dialog = document.getElementById('my-alert-dialog1');
+      if (dialog) {
+        dialog.show();
+      } else {
+        ons.createElement('alert-dialog1.html', { append: true })
+          .then(function (dialog) {
+            dialog.show();
+          });
+      }
+    };
+    var hideAlertDialog1 = function () {
+      document
+        .getElementById('my-alert-dialog1')
+        .hide();
+    };
   </script>
 
   <!-- <script type="text/javascript" src="cordova.js"></script> -->

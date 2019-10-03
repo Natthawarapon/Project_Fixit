@@ -18,7 +18,7 @@ var pushpage = '<a id="push-button" onclick="pushPage()"> Click </a>';
 var ratIcon = L.icon({
   iconUrl: 'img/boy-icon.png',
 
-  iconSize: [60, 50],
+  iconSize: [50, 40],
   iconAnchor: [22, 94],
   popupAnchor: [-3, -76]
 });
@@ -31,17 +31,15 @@ firestore.collection("Technicians").get().then(function (querySnapshot) {
 
     console.log("lat :" + doc.data().latitude, "long : " + doc.data().longitude);
     
-    L.marker([doc.data().latitude, doc.data().longitude], { icon: ratIcon }).addTo(map).bindPopup(
+    L.marker([doc.data().latitude, doc.data().longitude,11], { icon: ratIcon }).addTo(map).bindPopup(
       " ชื่อร้าน : " + doc.data().namestore + ";" + '<a id="push-button" onclick="pushPage(' + "'" + doc.data().namestore + "'" + ')">' + "Click" + '</a>').openPopup();
-
-
   });
 });
 
 
 function onLocationFound(e) {
 
-  L.marker(e.latlng, 9).addTo(map)
+  L.marker(e.latlng,8).addTo(map)
     .bindPopup("You are here! ").openPopup();
 
 
