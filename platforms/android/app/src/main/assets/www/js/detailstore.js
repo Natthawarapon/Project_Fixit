@@ -23,10 +23,7 @@
 
 
 function pushPage() {
-
-
   document.querySelector('#myNavigator').pushPage('detailStore.html');
-
 }
 
 

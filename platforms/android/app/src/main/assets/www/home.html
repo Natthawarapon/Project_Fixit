@@ -4,9 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="viewport"
-    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <!-- <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Material +++ icon -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
@@ -33,44 +37,60 @@
   <!--CSS-->
   <link rel="stylesheet" type="text/css" href="css/home.css">
 
-  <title>Home</title>
+  <title>Fixit</title>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyB6QMhAaE3oktdyy8deswQNQIw4cwPq-W4",
+      authDomain: "fixit-app-e3546.firebaseapp.com",
+      databaseURL: "https://fixit-app-e3546.firebaseio.com",
+      projectId: "fixit-app-e3546",
+      storageBucket: "fixit-app-e3546.appspot.com",
+      messagingSenderId: "139817871220",
+      appId: "1:139817871220:web:b634b75fb562dcd2"
+    };
+    // Initialize Firebase
 
+    firebase.initializeApp(firebaseConfig);
+    var firestore = firebase.firestore();
+  </script>
 
 </head>
 
 <body>
-  <!--  Page  -->
-  <ons-page>
-    <!--   toolbar  -->
-    <ons-toolbar style="background-color: #FFE200 ">
-      <div class="center">Fix it</div>
-      <div class="right">
-        <ons-toolbar-button>
-          <ons-icon icon="fa-sign-out-alt" style="color: black" onclick="logout()"></ons-icon>
-        </ons-toolbar-button>
-      </div>
-    </ons-toolbar>
-    <!--  //toolbar  -->
+  <ons-navigator swipeable id="myNavigator1">
+    <!--  Page  -->
+    <ons-page>
+      <!--   toolbar  -->
+      <ons-toolbar style="background-color: #FFE200 ">
+        <div class="center">Fix it</div>
+        <div class="right">
+          <ons-toolbar-button>
+            <ons-icon icon="fa-sign-out-alt" style="color: black" onclick="logout()"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+      <!--  //toolbar  -->
 
-    <!--   toolbar  -->
-    <ons-tabbar style="background-color: #FFE200" swipeable position="under">
-      <ons-tab style="background-color: #FFE200" page="tab1.html" label="Map"
-        icon="fa-map-marked-alt, material:fa-map-marked-alt" active>
-      </ons-tab>
-      <ons-tab style="background-color: #FFE200" page="tab2.html" label="Coins" icon="fa-coins" active-icon="fa-coins">
-      </ons-tab>
-      <ons-tab style="background-color: #FFE200" page="tab3.html" label="Notification" icon="fa-history"
-        active-icon="fa-history">
-      </ons-tab>
-      <ons-tab style="background-color: #FFE200" page="tab4.html" label="Setttings" icon="md-settings"
-        active-icon="md-settings">
-      </ons-tab>
+      <!--   toolbar  -->
+      <ons-tabbar style="background-color: #FFE200" swipeable position="under" id="tabbar">
+        <ons-tab style="background-color: #FFE200" page="tab1.html" label="Map"
+          icon="fa-map-marked-alt, material:fa-map-marked-alt" active>
+        </ons-tab>
+        <ons-tab style="background-color: #FFE200" page="tab2.html" label="Coins" icon="fa-coins"
+          active-icon="fa-coins">
+        </ons-tab>
+        <ons-tab style="background-color: #FFE200" page="tab3.html" label="Notification" icon="fa-history"
+          active-icon="fa-history">
+        </ons-tab>
+        <ons-tab style="background-color: #FFE200" page="tab4.html" label="Setttings" icon="md-settings"
+          active-icon="md-settings">
+        </ons-tab>
 
-    </ons-tabbar>
-    <!-- //toolbar -->
-  </ons-page>
-  <!--  //page ========= -->
-
+      </ons-tabbar>
+      <!-- //toolbar -->
+    </ons-page>
+    <!--  //page ========= -->
+  </ons-navigator>
   <!--  ======================================================tab1 >> Maps ===================================================== -->
   <template id="tab1.html">
     <ons-page id="Tab1">
@@ -80,85 +100,97 @@
 
       <template id="test1.html">
         <ons-page id="test1">
-          <center style="background-color: white">
 
-            <!--<ons-button style="background-color: rgb(56, 56, 54)">List</ons-button>-->
-          </center>
+          <div id="showfixlist">
 
-          <ons-card id="map" style="width: 95%; height : 120%">
+          </div>
+          <script>
+
+            function showListDoingFix() {
+              var namestore_requert = localStorage.getItem("namestore");
+
+              firestore.collection("requestFix").where("namestore", "==", namestore_requert)
+                .onSnapshot(function (snapshot) {
+                  snapshot.docChanges().forEach(function (change) {
+
+                    if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 1) {
+                      console.log("Modified modified requestFix: ", change.doc.data());
+                      // var html 
+
+                      $('#showfixlist').append(
+
+                        '<ons-card>' +
+                        '<div class="container">' +
+                        '<div class="row">' +
+                        '<div class="col-sm-6">' +
+                        '<div class="title" style="font-size: 20px">ร้าน : ' + change.doc.data().namestore + '</div>' +
+                        ' <div class="content" style="font-size: 15px">กำลังมาคะ คุณ :' + change.doc.data().customer + 'รอสักครู่นะคะ.' +
+                        '</div>' +
+                        '</div>' +
+                        ' <div class="col-sm-4">' +
+                        '<center>' +
+                        ' <button type="button" class="btn btn-outline-success"><i class="fa fa-phone" onclick=""></i></button>' +
+
+                        '<button type="button" class="btn btn-outline-warning " id="chatclick"><i class="fa fa-comment" onclick="chat()"></i></button>' +
+                        '</center>' +
+                        ' </div>' +
+                        '</div>' +
+                        '</div>' +
+                        ' </ons-card>'
+
+                      )
+                    }
+
+                  });
+                })
+
+            }
+
+            showListDoingFix();
+
+            // function review() {
+            //   var namestore_review = localStorage.getItem("nammestore");
+            //   firestore.collection("requestFix").where("namestore", "==", namestore_review)
+            //     .onSnapshot(function (snapshot) {
+            //       snapshot.docChanges().forEach(function (change) {
+            //         if (change.type == "modified" || change.type === "added") {
+            //            if ( change.doc.data().done == 2) {
+            //           console.log("Modified modified requestFix: ", change.doc.data());
+                      
+            //           ons.notification.prompt('Prompt!')
+            //             .then(function (input) {
+            //               var message = input ? 'Entered: ' + input : 'Entered nothing!';
+            //               ons.notification.alert(message);
+            //             });
+            //         }
+
+            //         }
+                   
+
+            //       });
+
+            //     })
+            // }
+
+            // var showPrompt = function () {
+            //   ons.notification.prompt('Prompt!')
+            //     .then(function (input) {
+            //       var message = input ? 'Entered: ' + input : 'Entered nothing!';
+            //       ons.notification.alert(message);
+            //     });
+            // };
+            // review();
+          </script>
+          <div class="content" id="map" style="width: 100%; height: 100%"> </div>
 
 
-            <!--   js Maps  -->
-            <!-- =============// Map ================== -->
-
-
-            <script>
-              var ratIcon = L.icon({
-                iconUrl: 'http://andywoodruff.com/maptime-leaflet/rat.png',
-                iconSize: [60, 50]
-              });
-
-              var map = L.map('map').setView([7.893542840690553, 98.35242033004761], 11);
-              L.tileLayer('https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=prAnw6NTF7eaj3wF5QFK', {
-                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
-
-              }).addTo(map);
-              map.locate({ setView: true }, 9);
-
-
-              var firebaseConfig = {
-                apiKey: "AIzaSyB6QMhAaE3oktdyy8deswQNQIw4cwPq-W4",
-                authDomain: "fixit-app-e3546.firebaseapp.com",
-                databaseURL: "https://fixit-app-e3546.firebaseio.com",
-                projectId: "fixit-app-e3546",
-                storageBucket: "fixit-app-e3546.appspot.com",
-                messagingSenderId: "139817871220",
-                appId: "1:139817871220:web:b634b75fb562dcd2"
-              };
-              // Initialize Firebase
-
-              firebase.initializeApp(firebaseConfig);
-
-              var pushpage = '<a id="push-button" onclick="pushPage()"> Click </a>';
-
-              var ratIcon = L.icon({
-                iconUrl: 'img/boy-icon.png',
-
-                iconSize: [60, 50],
-                iconAnchor: [22, 94],
-                popupAnchor: [-3, -76]
-              });
-
-              var firestore = firebase.firestore();
-              firestore.collection("Technicians").get().then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                  // doc.data() is never undefined for query doc snapshots
-                  console.log(doc.id, " => ", doc.data());
-                  console.log("lat :" + doc.data().latitude, "long : " + doc.data().longitude);
-
-                  L.marker([doc.data().longitude, doc.data().latitude], { icon: ratIcon }).addTo(map).bindPopup(
-                    " ชื่อร้าน : " + doc.data().namestore + ";" + pushpage).openPopup();
-
-                });
-              });
 
 
 
+          <!-- <ons-card id="map" style="width: 95%; height : 120% ;" > -->
 
-              function onLocationFound(e) {
+          <script src="js/home-map.js"></script>
 
-                L.marker(e.latlng, 9).addTo(map)
-                  .bindPopup("You are here! ").openPopup();
-
-
-              } map.on('locationfound', onLocationFound);
-
-              function onLocationError(e) {
-                alert(e.message);
-              } map.on('locationerror', onLocationError);
-
-            </script>
-            <!--  // js Map  -->
           </ons-card>
         </ons-page>
       </template>
@@ -166,16 +198,16 @@
       <!-- =========================Detail store information =========================================== -->
       <template id="detailStore.html">
         <ons-page id="test2">
-       
-          <ons-toolbar>
+
+          <ons-toolbar style="background-color: #FFE200">
             <div class="left">
               <ons-back-button>Back</ons-back-button>
             </div>
-            <div class="center"></div>
+            <div class="center"> รายละเอียดร้าน</div>
           </ons-toolbar>
           <ons-card>
             <!-- ==========Carousal========== -->
-            <ons-carousel fullscreen swipeable auto-scroll overscrollable id="carousel" style="height: 250px;">
+            <ons-carousel fullscreen swipeable auto-scroll overscrollable id="carousel" style="height: 170px;">
               <ons-carousel-item
                 style="background: url('https://www.thairath.co.th/media/4DQpjUtzLUwmJZZPD15TX0i2J7gu4aL4Jy5bOehYBSEJ.jpg') no-repeat center; background-size: contain;">
 
@@ -189,30 +221,134 @@
 
               </ons-carousel-item>
             </ons-carousel>
-            <!-- ==========EndCarousal========== -->
 
             <center>
               <section style="padding: 10px">
-                <button type="button" class="btn btn-outline-success"><i class="fa fa-phone" onclick="createAlertDialog()"></i></button>
-                <button type="button" class="btn btn-outline-warning"><i class="fa fa-comment" onclick="createAlertDialog()"></i></button>
-                <button type="button" class="btn btn-outline-primary" id="btn-map" onclick="myNavFunc()"><i
-                    class="fa fa-compass"></i></button>
+
+                <button type="button" id="requestFix" class="btn btn-lg btn-outline-success"
+                  onclick="requestFix()">เรียกซ่อม&nbsp; <i class="material-icons">build</i></button>
+
+                <button type="button" class="btn btn-lg btn-outline-primary" id="btn-map" onclick="myNavFunc()">นำทาง
+                  &nbsp;<i class="fa fa-compass"></i></button>
               </section>
+
             </center>
 
-            <ons-card style="background-color: #cce3f0;">
+            <ons-card style="background-color:  #d4d4d1;">
               <div class="title">
-                <p style="font-size: 16px">PPMotor</p>
-                <p style="font-size: 12px; font-style: normal">3/4 Sakdidet Rd, Talat Nuea, Mueang Phuket District,
-                  Phuket 83000<p>
+                <p id="namestore" style="font-size: 16px"></p>
+                <p id="address" style="font-size: 12px; font-style: normal">
               </div>
               <ons-list-item>
                 <div class="right" style="font-size: 12px;">
-                  สถานะร้าน &nbsp; <i class="fa fa-circle" style="color: yellow;"></i>
+
+                  สถานะร้าน &nbsp; <div id="status" ></div>
+                  <script>
+                    //============================ เช็คสถานะร้าน ว่าเปิดหรือปิด ==================================================
+                    // var namestore_getstatus = localStorage.getItem("namestore");
+                    // var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
+                    // firebaseRef.get().then(function (doc) {
+                     
+                    //     if ( doc.data().namestore == namestore_getstatus && doc.data().status == "on") {
+                    //       document.getElementById("status").innerHTML = "Open";
+                    //       document.getElementById("status").style.color = "#008000";
+
+
+                    //     } else {
+                    //       document.getElementById("status").innerHTML = "Close";
+                    //       document.getElementById("status").style.colorr = "#FF0000";
+
+
+                    //     }
+                      
+
+                    // });
+              
+                    
+
+                //     firestore.collection("Technicians").onSnapshot(function (snapshot) {
+                //   snapshot.docChanges().forEach(function (change) {
+                //    if (change.type == "modified" ) {
+
+                //     console.log("Modified modified Status: ", change.doc.id);
+                    
+                //     if (namestore_getstatus != change.doc.id  ) {
+
+                //       console.log( "namestore_getstatus::"+namestore_getstatus+","+"change.doc.id"+ change.doc.id);
+                      
+                //       if (change.doc.data().status == "on") {
+                //       document.getElementById("status").innerHTML = "Open";
+                //       document.getElementById("status").style.color = "#008000";
+                      
+                //     }else{
+
+                //       document.getElementById("status").innerHTML = "Close";
+                //           document.getElementById("status").style.colorr = "#FF0000";
+                //     }
+                //     }
+          
+                      
+                //    }
+                      
+                    
+                   
+                //   });
+                // })
+
+                    // var firestoreRef = firestore.collection("Technicians").doc(namestore_getstatus)
+                    //   .onSnapshot(function (doc) {
+
+                    //     var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+                    //     console.log(source, " data: ", doc.data().status);
+
+                    //     var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
+                    //     firebaseRef.get().then(function (doc) {
+                  
+                    //         if (  doc.data().namestore == namestore_getstatus &&doc.data().status == "on") {
+                    //           document.getElementById('status').innerHTML = "Open";
+                    //           document.getElementById("status").style.color = "#008000";
+
+                    //           document.getElementById("requestFix").disabled = false;
+                    //         } else {
+                    //           document.getElementById('status').innerHTML = "Close";
+                    //           document.getElementById("status").style.color = "#FF0000";
+
+                    //           document.getElementById("requestFix").disabled = true;
+                    //         }
+
+
+
+
+                    //     });
+
+                    //   });
+                    ////=============================ฟังก์ชั่น เรียกช่างซ่อมรถ =========================================================
+
+
+                    function requestFix() {
+                      var CusName = localStorage.getItem("displayName");
+                      var namestore = localStorage.getItem("namestore");
+
+                      firebase.firestore().collection('requestFix').add({
+                        customer: CusName,
+                        namestore: namestore,
+                        request: 1,
+                        accept: 0,
+                        done: 0
+                      }).then(function (docRef) {
+                        console.log("requestFix  " + docRef.id + " success");
+                        firebase.firestore().collection('requestFix').doc(docRef.id).update({
+                          fixID: docRef.id
+
+                        })
+                      })
+
+                      showModal();
+
+                    }
+                  </script>
                 </div>
-                <!-- <div class="right">
-                    <ons-switch checked></ons-switch>
-                  </div> -->
+
               </ons-list-item>
               </div>
             </ons-card>
@@ -220,16 +356,16 @@
           <!-- ons-cord review -->
           <ons-card>
             <p style="font-size: 25px">Review</p>
-            <ons-card style="background-color: #cfe779;">
-              
+            <ons-card style="background-color: #ffe96d ;">
+
               <div class="title">
                 <p style="font-size: 16px">นายเอ้ นามสมมติ</p>
                 <p style="font-size: 12px; font-style: normal">ถูกและดี ราคาเป็นกันเอง ช่างซ่อมหล่อมาก<p>
               </div>
 
             </ons-card>
-            <ons-card style="background-color: #cfe779;">
-              
+            <ons-card style="background-color: #ffe96d;">
+
               <div class="title">
                 <p style="font-size: 16px">นางสาวพลัด นามสมมติ</p>
                 <p style="font-size: 12px; font-style: normal">ช่างซ่อมเป็นกันเองมาก <p>
@@ -238,82 +374,116 @@
             </ons-card>
           </ons-card>
 
-          <script>
-            function myNavFunc() {
 
-              var long = 98.3370182;
-              var lat = 7.8947922;
-              // If it's an iPhone..
-              if ((navigator.platform.indexOf("iPhone") != -1)
-                || (navigator.platform.indexOf("iPod") != -1)
-                || (navigator.platform.indexOf("iPad") != -1)
-                || (navigator.platform.indexOf("Android") != -1))
-                window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
-              else
-                window.open('http://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+
+          <!-- Loading -->
+          <ons-modal direction="up">
+            <div style="text-align: center">
+              <p>
+                <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
+              </p>
+            </div>
+          </ons-modal>
+          <script>
+            ////========================== showModal =======================================
+            function showModal() {
+
+              var modal = document.querySelector('ons-modal');
+              modal.show();
+              setTimeout(function () {
+                modal.hide();
+              }, 3000);
+              notifyAcceptFix()
             }
+
+
+
+          </script>
+
+          <script>
+
+            function notifyAcceptFix() {
+              var namestore_requert = localStorage.getItem("namestore");
+              firestore.collection("requestFix").where("namestore", "==", namestore_requert)
+                .onSnapshot(function (snapshot) {
+                  snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "added" && change.doc.data().accept == 0) {
+                      console.log("Added added requestFix: ", change.doc.data());
+                    }
+                    if (change.type === "modified") {
+                      console.log("Modified modified requestFix: ", change.doc.data());
+                      if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 1) {
+                        showAlertacceptFix();
+                      } else if (change.doc.data().accept == 2 && change.doc.data().request == 2 && change.doc.data().done == 0) {
+                        showAlertcanceltFix();
+                      }
+                      // console.log("change.doc.data() ==>" + change.doc.data().accept);
+                      // var accept = change.doc.data().accept;
+                      // localStorage.setItem('FixID', change.doc.data().fixID);
+
+                      // createAlertDialog3();
+                    }
+                    if (change.type === "removed") {
+                      console.log("Removed removed requestFix: ", change.doc.data());
+                    }
+                  });
+                })
+            }
+
+            var showAlertacceptFix = function () {
+              var namestore_alert = localStorage.getItem("namestore");
+              ons.notification.alert('ร้าน :' + namestore_alert + "รับซ่อมแล้วร้านกำลังมาคะ ");
+            };
+
+            var showAlertcanceltFix = function () {
+              var namestore_alert = localStorage.getItem("namestore");
+              ons.notification.alert('ขอโทษคะ ร้าน :' + namestore_alert +
+                "ปธิเสธการรับซ่อม");
+            };
           </script>
         </ons-page>
+
       </template>
-      <!-- alert เรียกซ่อม  -->
-      <template id="alert-dialog.html">
-        <ons-alert-dialog id="my-alert-dialog" modifier="rowfooter">
-          <div class="alert-dialog-title">คุณต้องการเรียกซ่อม</div>
-          <div class="alert-dialog-content">
-           ถ้าคุณต้องการเรียกซ่อมให้ กด "เรียกซ่อม" และคุณจะได้รับเหรียญเมื่อทำการซ่อมเสร็จ 
+      <!-- =========================Chat page =========================================== -->
+      <template id="chat.html">
+        <ons-page id="test2">
+
+          <ons-toolbar style="background-color: #FFE200">
+            <div class="left">
+              <ons-back-button>Back</ons-back-button>
+            </div>
+            <div id="namestorechat" class="center"></div>
+            <script>
+              var namestorechat = localStorage.getItem("namestore");
+              document.getElementById('namestorechat').innerHTML = namestorechat;
+            </script>
+          </ons-toolbar>
+          <div class="col-sm-3 col-sm-offset-4 frame">
+            <ul></ul>
+            <div>
+              <div class="msj-rta macro1">
+                <div class="text text-r" style="background:whitesmoke !important">
+                  <input class="mytext" placeholder="Type a message" />
+                </div>
+              </div>
+              <div style="padding:10px;">
+                <!-- <span class="glyphicon glyphicon-share-alt"></span> -->
+                <span class="input-group-btn">
+                  <button class="btn btn-primary btn-md send" id="btn-chat">Send</button>
+                </span>
+              </div>
+            </div>
+
           </div>
-          <div class="alert-dialog-footer">
-            <ons-alert-dialog-button onclick="hideAlertDialog()">ยกเลิก</ons-alert-dialog-button>
-            <ons-alert-dialog-button onclick="showModal()">เรียกซ่อม</ons-alert-dialog-button>
-          </div>
-        </ons-alert-dialog>
+          <!--============ link chat css ==============-->
+          <link rel="stylesheet" href="css/chat.css">
+          <script src="js/chat.js"></script>
+        </ons-page>
       </template>
 
-      <!-- Loading -->
-      <ons-modal direction="up">
-        <div style="text-align: center">
-          <p>
-            <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
-          </p>
-        </div>
-      </ons-modal>
+      </script>
     </ons-page>
   </template>
-  <script>
-
-    var createAlertDialog = function () {
-      var dialog = document.getElementById('my-alert-dialog');
-
-      if (dialog) {
-        dialog.show();
-      } else {
-        ons.createElement('alert-dialog.html', { append: true })
-          .then(function (dialog) {
-            dialog.show();
-          });
-      }
-    };
-
-    var hideAlertDialog = function () {
-
-      document
-        .getElementById('my-alert-dialog')
-        .hide();
-
-    };
-
-    function showModal() {
-      
-      document
-        .getElementById('my-alert-dialog')
-        .hide();
-  var modal = document.querySelector('ons-modal');
-  modal.show();
-  setTimeout(function() {
-    modal.hide();
-  }, 2000);
-}
-  </script>
 
   <!--  ====================================================== // tab1 >> Maps ===================================================== -->
 
@@ -321,10 +491,9 @@
   <template id="tab2.html">
     <ons-page id="Tab2">
       <ons-card>
-        <!-- <p style="text-align: center;">
-          COINS
-        </p> -->
-        <center><img src="img/coin.png" style="width: 60px;"> &nbsp; 200</center>
+        <div class="con">
+          <center style="font-size: 40px;"><img src="img/coin.png" style="width: 60px;">&nbsp; 200 </center>
+        </div>
         <ons-card style="background-color: #a5cec3;">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -335,31 +504,28 @@
           <hr>
 
           <div class="input-group">
-            <span class="input-group-text" style="font-size: 18px;">จำนวนเหรียญ &nbsp;</span>
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">เลือกจำนวนเหรียญ</button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">10 บาท (150 coins)</a>
-                <a class="dropdown-item" href="#">20 บาท (250 coins)</a>
-                <a class="dropdown-item" href="#">50 บาท (450 coins)</a>
-              </div>
-            </div>
+            <span class="input-group-text" style="font-size: 14px;">จำนวนเหรียญ &nbsp;</span>
+            <select id="coin" class="mdb-select md-form" style="font-size: 14px;">
+              <option value="" disabled selected>เลือกจำนวน</option>
+              <option value="150">10 บาท (150 coins)</option>
+              <option value="250">20 บาท (250 coins)</option>
+              <option value="500">50 บาท (500 coins)</option>
+            </select>
+
           </div>
         </ons-card>
         <center>
           <section style="padding: 10px">
-            <button type="button" class="btn btn-danger">ยกเลิก</button>
+            <button type="button" class="btn btn-danger" onclick="getCoin()">ยกเลิก</button>
             <button type="button" class="btn btn-success" onclick="createAlertDialog1()">ตกลง</button>
-
           </section>
         </center>
       </ons-card>
+
       <template id="alert-dialog1.html">
         <ons-alert-dialog id="my-alert-dialog1" modifier="rowfooter">
           <div class="alert-dialog-title">แสดงข้อความนี้ให้ช่างซ่อม กรอกรหัสยืนยันส่วนลด</div>
           <div class="alert-dialog-content">
-         
             <input type="password" aria-label="First name" class="form-control">
           </div>
           <div class="alert-dialog-footer">
@@ -368,27 +534,8 @@
           </div>
         </ons-alert-dialog>
       </template>
-      <script>
-      
-      var createAlertDialog1 = function() {
-  var dialog = document.getElementById('my-alert-dialog1');
 
-  if (dialog) {
-    dialog.show();
-  } else {
-    ons.createElement('alert-dialog1.html', { append: true })
-      .then(function(dialog) {
-        dialog.show();
-      });
-  }
-};
 
-var hideAlertDialog1 = function() {
-  document
-    .getElementById('my-alert-dialog1')
-    .hide();
-};
-</script>
     </ons-page>
   </template>
   <!--  ====================================================== // tab2 >> Coins ===================================================== -->
@@ -405,6 +552,7 @@ var hideAlertDialog1 = function() {
         <span>ได้รับเหรียญ 20 เหรียญ</span>
         <span class="notitext">คุณได้รับเหรียญ 20 เหรียญจากการขอรับบริการซ่อม เมื่อ 18.06 น.</span>
       </ons-card>
+
     </ons-page>
   </template>
   <!--  ====================================================== // tab3 >> History ===================================================== -->
@@ -412,34 +560,236 @@ var hideAlertDialog1 = function() {
   <!--  ======================================================tab4 >> Setttings ===================================================== -->
   <template id="tab4.html">
     <ons-page id="tab4">
-      <!-- crad profile -->
-      <ons-card>
-        <center> <img src="img/user.png" alt="Onsen UI" style="width: 35%">
-          <div class="title" style="font-size: 25px">
-            สมยุทธ์ &nbsp; ลาพักงาน
-          </div>
-        </center>
-      </ons-card>
-      <!-- //crad profile -->
 
-      <!-- card setting -->
-      <ons-card>
-        <div class="content">
-          <ons-list>
-            <ons-list-header>Setttings</ons-list-header>
-            <ons-list-item>Help & Support</ons-list-item>
-            <ons-list-item>Contact Us</ons-list-item>
-            <ons-list-item>Terms & Conditions</ons-list-item>
-          </ons-list>
-        </div>
-      </ons-card>
-      <!-- //crad setting -->
+      <ons-navigator swipeable id="myNaviTap4" page="setting.html"></ons-navigator>
+
+      <template id="setting.html">
+        <ons-page id="setting">
+          <!-- card profile -->
+          <ons-card>
+            <script>
+              document.getElementById("displayname").innerHTML = localStorage.getItem("displayName");
+              var img = document.createElement('img');
+              img.src = localStorage.getItem("photoURL");
+              document.getElementById('profile-pic').appendChild(img);
+              console.log(img.src);
+
+            </script>
+            <center>
+              <div id="profile-pic">
+              </div>
+              <img src="" alt="" srcset="">
+
+              </div>
+              <div class="title" style="font-size: 25px" id="displayname">
+
+              </div>
+            </center>
+          </ons-card>
+          <!-- //card profile -->
+
+          <!-- card setting -->
+          <ons-card>
+            <div class="content">
+              <ons-list>
+                <ons-list-header>Setttings</ons-list-header>
+                <ons-list-item id="push-page">Help & Support<i class="large material-icons">chevron_right</i>
+                </ons-list-item>
+                <ons-list-item id="push-page2">Contact Us<i class="large material-icons">chevron_right</i>
+                </ons-list-item>
+                <ons-list-item id="push-page3">Terms & Conditions<i class="large material-icons">chevron_right</i>
+                </ons-list-item>
+              </ons-list>
+
+            </div>
+          </ons-card>
+          <!-- //card setting -->
+
+        </ons-page>
+      </template>
+      <!--Help-->
+      <template id="help.html">
+        <ons-page id="help">
+          <ons-toolbar style="background-color: #FFE200">
+            <div class="left">
+              <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center"></div>
+          </ons-toolbar>
+          <ons-card>
+            <center style="font-size: 14pt">Help & Support</center>
+            <div style="margin-top: 20px">
+              <ons-list-header>บริการ</ons-list-header>
+              <ons-list-item expandable style="font-size: 10pt">
+                FIX IT APP คืออะไร
+                <div class="expandable-content">
+                  <p>
+                    FIX IT คือแอพที่ใช้เพื่อเรียกขอรับบริการซ่อมรถนอกสถานที่จากช่างซ่อม
+                    เพื่อความสะดวกสบายแก่ผู้ขับขี่รถจักรยานยนต์
+                  </p>
+                </div>
+              </ons-list-item>
+
+              <ons-list-item expandable style="font-size: 10pt">
+                เหรียญ คืออะไร
+                <div class="expandable-content">
+                  <p>
+                    เหรียญ คือสิ่งที่ใช้นำมาแลกเพื่อเป็นส่วนลดตอนจ่ายเงินเมื่อช่างทำการซ่อมเสร็จสิ้น
+                  </p>
+                </div>
+            </div>
+            </ons-list-item>
+
+          </ons-card>
+        </ons-page>
+      </template>
+
+      <!--ContactUs-->
+      <template id="contactUs.html">
+        <ons-page id="contactUs">
+          <ons-toolbar style="background-color: #FFE200">
+            <div class="left">
+              <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center"></div>
+          </ons-toolbar>
+          <ons-card>
+            <center style="font-size: 14pt">Contact Us</center>
+            <div style="margin: 20px 20px 20px 20px">
+              <center><img src="img/PSU.png" alt="PSU Logo" width="20%" style="margin-bottom: 20px"></center>
+
+              <center>
+                <div class="expandable-content" style="font-size: 10pt">
+                  <p>แอพพลิเคชันนี้ถูกสร้างขึ้นเป็นส่วนหนึ่งของรายวิชา PROJECT IN SE รหัส 977-491 ภาคเรียนที่ 1/2562</p>
+                  <ons-list-item>
+                    <div class="left">
+                      <img class="list-item__thumbnail" src="https://qrgo.page.link/3DJo3">
+                    </div>
+                    <div class="center">
+                      <span class="list-item__title">นางสาวณัฐวราภรณ์ ทับเที่ยง</span><span
+                        class="list-item__subtitle">ผู้จัดทำโปรเจค</span>
+                    </div>
+                  </ons-list-item>
+                  <ons-list-item>
+                    <div class="left">
+                      <img class="list-item__thumbnail" src="https://qrgo.page.link/1aVuy">
+                    </div>
+                    <div class="center">
+                      <span class="list-item__title">นายพีระนันท์ เรียนมาแทน</span><span
+                        class="list-item__subtitle">ผู้จัดทำโปรเจค</span>
+                    </div>
+                  </ons-list-item>
+                  <ons-list-item>
+                    <div class="left">
+                      <img class="list-item__thumbnail" src="https://qrgo.page.link/r5fUv">
+                    </div>
+                    <div class="center">
+                      <span class="list-item__title">ผศ.ดร.อซีส นันทอมรพงศ์</span><span
+                        class="list-item__subtitle">อาจารย์ที่ปรึกษาโปรเจค</span>
+                    </div>
+                  </ons-list-item>
+                </div>
+              </center>
+              <div style="font-size: 14pt ;margin-right: 15px; margin-bottom: 15px"><a href="tel:0980103837">
+                  <img src="img/telephone.png" style="width: 30px;"></a>&nbsp;ติดต่อเรา</div>
+
+              <div style="font-size: 14pt;margin-right: 15px; margin-bottom: 15px"><a
+                  href="mailto:s5930213012@phuket.psu.ac.th">
+                  <img src="img/email.png" style="width: 30px;"></a>&nbsp;Email
+              </div>
+
+            </div>
+
+          </ons-card>
+        </ons-page>
+      </template>
+
+      <!--Terms Conditions-->
+      <template id="terms.html">
+        <ons-page id="terms">
+          <ons-toolbar style="background-color: #FFE200">
+            <div class="left">
+              <ons-back-button>Back</ons-back-button>
+            </div>
+            <div class="center"></div>
+          </ons-toolbar>
+          <ons-card>
+            <div>
+              <center style="font-size: 14pt">Terms Conditions</center>
+            </div>
+            <div style="margin: 20px 20px 20px 20px">
+              <p style="font-size: 10pt"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                นโยบายความเป็นส่วนตัว
+                นโยบายการจัดเก็บข้อมูลส่วนบุคคลของ FIX IT</p>
+
+              <p style="font-size: 10pt"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; คุณจำเป็นต้องเชื่อมต่อ FIX IT ไปยังบัญชี
+                Facebook Google ของคุณ เพื่อลงทะเบียน
+                และในกระบวนการดำเนินการเราจำเป็นต้องเก็บรวบรวมข้อมูลส่วนบุคคลต่อไปนี้จาก Facebook Google
+                เพื่อเปิดใช้งานบัญชีของคุณ
+                - Google: ภาพ และชื่อนามสกุลผู้ใช้
+                - Facebook: ภาพ และชื่อนามสกุลผู้ใช้</p>
+
+              <p style="font-size: 10pt"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ในระหว่างที่ใช้ FIX IT
+                คุณสามารถลงทะเบียนอีเมล์หรือชื่อเล่นในโปรไฟล์ได้
+                คุณสามารถเลือกที่จะลงทะเบียนอีเมล์หรือชื่อเล่นซึ่งคุณสามารถแก้ไขข้อมูลได้ในภายหลังเมื่อคุณต้องการ
+                นอกจากนี้เรายังเก็บที่อยู่อีเมลของผู้ที่จะสมัครชาลเลนจ์ลีก
+                และขอสงวนสิทธิ์ในการเก็บรวบรวมข้อมูลการติดต่อรวมทั้งข้อมูลการจัดส่งรายการเมื่อคุณติดต่อเราหรือเมื่อคุณส่งรายการในช่วงกิจกรรมพิเศษ
+                เมื่อคุณใช้บริการของเรา ข้อมูลเกี่ยวกับเครือข่ายของคุณ ( ที่อยู่ IP ,การเก็บข้อมูลที่อยู่ของ IP,
+                ประเภทของเครือข่าย , ฯลฯ) , บันทึกการใช้บริการ (ความถี่ในการใช้ , การใช้เหรียญ , ฯลฯ ) ,
+                ข้อมูลของอุปกรณ์ (รุ่น , ระบบปฏิบัติการ , ฯลฯ) อาจถูกเก็บรวบรวม
+                วิธีการเก็บข้อมูลส่วนบุคคล</p>
+
+            </div>
+          </ons-card>
+        </ons-page>
+      </template>
 
     </ons-page>
   </template>
 
-  <!--  ====================================================== // tab4 >> Settings ===================================================== -->
+  <!--ScriptPageSetting-->
+  <script>
+    document.addEventListener('init', function (event) {
+      var page = event.target;
 
+      if (page.id === 'setting') {
+        page.querySelector('#push-page').onclick = function () {
+          document.querySelector('#myNavigator1').pushPage('help.html', { data: { title: 'FIX IT' } });
+        };
+      } else if (page.id === 'help') {
+        7
+        page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+      }
+    });
+
+    document.addEventListener('init', function (event) {
+      var page = event.target;
+      if (page.id === 'setting') {
+        page.querySelector('#push-page2').onclick = function () {
+          document.querySelector('#myNavigator1').pushPage('contactUs.html', { data: { title: 'FIX IT' } });
+        };
+      } else if (page.id === 'contactUs') {
+        page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+      }
+    });
+
+    document.addEventListener('init', function (event) {
+      var page = event.target;
+      if (page.id === 'setting') {
+        page.querySelector('#push-page3').onclick = function () {
+          document.querySelector('#myNavigator1').pushPage('terms.html', { data: { title: 'FIX IT' } });
+        };
+      } else if (page.id === 'terms') {
+        page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+      }
+    });
+
+  </script>
+
+
+
+
+  <!--  ====================================================== // script all  ===================================================== -->
   <script>
 
 
@@ -448,6 +798,9 @@ var hideAlertDialog1 = function() {
       if (event.index == 0) {
         console.log('map clicked');
         // get data for map screen  
+        // if (document.getElementById('chatclick').clicked == true) {
+        //   alert("button was clicked");
+        // }
 
       } else if (event.index == 1) {
         console.log('coins clicked');
@@ -465,29 +818,150 @@ var hideAlertDialog1 = function() {
 
     });
 
-
-
   </script>
 
   <script>
-    // app logout 
-    function logout() {
-      firebase.auth().signOut().then(function () {
-        // Sign-out successful.
-        ons.notification.alert('See u again soon');
-        window.location.href = 'sign-in.html';
-      }).catch(function (error) {
-        // An error happened.
+
+
+    //==================================map pushPage to Detail Store ==================================
+    function pushPage(name) {
+      document.querySelector('#myNavigator1').pushPage('detailStore.html');
+
+      firestore.collection("Technicians").onSnapshot(function (snapshot) {
+                  snapshot.docChanges().forEach(function (change) {
+          
+
+                    console.log("Modified modified Status: ", change.doc.id);
+                    
+                    if (name == change.doc.id  ) {
+
+                      console.log( "name::"+name+","+"change.doc.id"+ change.doc.id);
+                      
+                      if (change.doc.data().status == "on") {
+                      document.getElementById("status").innerHTML = "Open";
+                      document.getElementById("status").style.color = "#008000";
+                      document.getElementById("requestFix").disabled = false;
+                    }else{
+
+                      document.getElementById("status").innerHTML = "Close";
+                          document.getElementById("status").style.color = "#FF0000";
+                          document.getElementById("requestFix").disabled = true;
+                    }
+
+                    }else{
+                      document.getElementById("status").innerHTML = "";
+                          document.getElementById("status").style.color = "#FFFFFF";
+
+                    }
+          
+                      
+                   
+                      
+                    
+                   
+                  });
+                })
+      firestore.collection("Technicians").doc(name).get().then(function (doc) {
+
+        var namestoreclick = localStorage.setItem('namestore', name);
+        var getnamestorclick = localStorage.getItem("namestoreclick");
+
+
+        document.getElementById('namestore').innerHTML = name;
+        document.getElementById('address').innerHTML = doc.data().address;
+
       });
+      // console.log(doc.data());
+
+    }
+
+    function chat() {
+      document.querySelector('#myNavigator1').pushPage('chat.html');
+      // showdata();
+
     }
 
 
+
+    ////======================= ฟังก์ชันนำทาง =============================
+    function myNavFunc() {
+
+      var long = 98.3370182;
+      var lat = 7.8947922;
+      // If it's an iPhone..
+      if ((navigator.platform.indexOf("iPhone") != -1)
+        || (navigator.platform.indexOf("iPod") != -1)
+        || (navigator.platform.indexOf("iPad") != -1)
+        || (navigator.platform.indexOf("Android") != -1))
+        window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+      else
+        window.open('http://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
+    }
+
+    ////========================== AlertDialog=======================================
+    var createAlertDialog = function () {
+      var dialog = document.getElementById('my-alert-dialog');
+
+      if (dialog) {
+        dialog.show();
+      } else {
+        ons.createElement('alert-dialog.html', { append: true })
+          .then(function (dialog) {
+            dialog.show();
+          });
+      }
+    };
+    ///========================== hideAlertDialog=======================================
+    var hideAlertDialog = function () {
+
+      document.getElementById('my-alert-dialog').hide();
+
+    };
+
+    ////========================= scriptหน้า Coins.html ==========================================================
+    function getCoin() {
+
+      firestore.collection("Users").get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data().coin);
+
+        });
+      });
+
+
+      var coin = document.getElementById("coin").value;
+      var coin = localStorage.setItem('coin', coin)
+      var getCoin = localStorage.getItem("coin");
+      const ncoin = parseInt(getCoin);
+      console.log("Coins:" + getCoin);
+
+    }
+
+
+    var createAlertDialog1 = function () {
+      var dialog = document.getElementById('my-alert-dialog1');
+      if (dialog) {
+        dialog.show();
+      } else {
+        ons.createElement('alert-dialog1.html', { append: true })
+          .then(function (dialog) {
+            dialog.show();
+          });
+      }
+    };
+    var hideAlertDialog1 = function () {
+      document
+        .getElementById('my-alert-dialog1')
+        .hide();
+    };
   </script>
 
   <!-- <script type="text/javascript" src="cordova.js"></script> -->
   <script type="text/javascript" src="js/home.js"></script>
-  <script type="text/javascript" src="js/detailstore.js"></script>
+  <script type="text/javascript" src="js/logout.js"></script>
   <!-- <script type="text/javascript" src="js/map.js"></script> -->
+
 
   <style>
     * {
@@ -498,9 +972,9 @@ var hideAlertDialog1 = function() {
       font-family: 'Pridi', serif;
     }
 
-    .center {
+    .con {
       font-family: 'Pridi', serif;
-
+      font-size: 25px;
     }
 
     .right {
@@ -515,7 +989,6 @@ var hideAlertDialog1 = function() {
       color: gray;
     }
   </style>
-
 </body>
 
 </html>
