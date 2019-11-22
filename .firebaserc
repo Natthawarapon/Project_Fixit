@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "fixit-app-e3546"
+  },
+  "targets": {
+    "fixit-app-e3546": {
+      "hosting": {
+        "fixit": [
+          "fixitapp-pj"
+        ]
+      }
+    }
   }
 }

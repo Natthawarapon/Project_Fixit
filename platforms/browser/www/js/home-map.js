@@ -5,13 +5,11 @@ var ratIcon = L.icon({
 });
 
 var map = L.map('map').setView([7.893542840690553, 98.35242033004761], 11);
-L.tileLayer('https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=prAnw6NTF7eaj3wF5QFK', {
+L.tileLayer('https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=QmcdepuuuVAKQApwz93r', {
   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
 
 }).addTo(map);
 map.locate({ setView: true }, 9);
-
-
 
 var pushpage = '<a id="push-button" onclick="pushPage()"> Click </a>';
 
@@ -27,6 +25,7 @@ var ratIcon = L.icon({
 firestore.collection("Technicians").get().then(function (querySnapshot) {
   querySnapshot.forEach(function (doc) {
     // doc.data() is never undefined for query doc snapshots
+    
     console.log(doc.id, " => ", doc.data());
 
     console.log("lat :" + doc.data().latitude, "long : " + doc.data().longitude);

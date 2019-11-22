@@ -1,14 +1,11 @@
 {
   "hosting": {
-    "public": "public",
+    "target" : "fixit",
+    "public": "www",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ]
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
   }
 }

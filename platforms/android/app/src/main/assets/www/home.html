@@ -8,7 +8,8 @@
     content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+  <!-- google font -->
+  <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <!-- Material +++ icon -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -27,6 +28,8 @@
   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
   <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
 
+  <script src='https://api.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v1.3.2/mapbox-gl.css' rel='stylesheet' />
   <!--Font-->
   <link href="https://fonts.googleapis.com/css?family=Pridi:600&display=swap" rel="stylesheet">
   <!--Bootstrap-->
@@ -58,11 +61,14 @@
 
 <body>
   <ons-navigator swipeable id="myNavigator1">
+
     <!--  Page  -->
     <ons-page>
       <!--   toolbar  -->
       <ons-toolbar style="background-color: #FFE200 ">
-        <div class="center">Fix it</div>
+        <div class="left"></div>
+        <div class="center" style="text-align: center; font-family: 'Luckiest Guy', cursive; font-size: 24px;">Fix it
+        </div>
         <div class="right">
           <ons-toolbar-button>
             <ons-icon icon="fa-sign-out-alt" style="color: black" onclick="logout()"></ons-icon>
@@ -90,10 +96,13 @@
       <!-- //toolbar -->
     </ons-page>
     <!--  //page ========= -->
+
   </ons-navigator>
+
   <!--  ======================================================tab1 >> Maps ===================================================== -->
+
   <template id="tab1.html">
-    <ons-page id="Tab1">
+    <ons-page id="Tab1" >
 
       <!--Test BTN-->
       <ons-navigator swipeable id="myNavigator" page="test1.html"></ons-navigator>
@@ -112,41 +121,77 @@
               firestore.collection("requestFix").where("namestore", "==", namestore_requert)
                 .onSnapshot(function (snapshot) {
                   snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "removed") {
 
-                    if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 1) {
-                      console.log("Modified modified requestFix: ", change.doc.data());
-                      // var html 
+                    } else {
+                      if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 1) {
+                        console.log("Modified modified requestFix: ", change.doc.data());
+                        // var html 
 
-                      $('#showfixlist').append(
+                        localStorage.setItem('FixID', change.doc.data().fixID);
+                        $('#showfixlist').append(
+                          '<ons-card>' +
+                          '<div class="container">' +
+                          '<div class="row">' +
+                          '<div class="col-sm-6">' +
+                          '<div class="title" style="font-size: 20px">ร้าน : ' + change.doc.data().namestore + '</div>' +
+                          ' <div class="content" style="font-size: 15px">กำลังมาคะ คุณ :' + change.doc.data().customer + 'รอสักครู่นะคะ.' +
+                          '</div>' +
+                          '</div>' +
+                          ' <div class="col-sm-4">' +
+                          '<center>' +
+                          ' <button type="button" class="btn btn-outline-success"><a href="tel:0993044146"><i class="fa fa-phone" onclick=""></i></a></button>' +
 
-                        '<ons-card>' +
-                        '<div class="container">' +
-                        '<div class="row">' +
-                        '<div class="col-sm-6">' +
-                        '<div class="title" style="font-size: 20px">ร้าน : ' + change.doc.data().namestore + '</div>' +
-                        ' <div class="content" style="font-size: 15px">กำลังมาคะ คุณ :' + change.doc.data().customer + 'รอสักครู่นะคะ.' +
-                        '</div>' +
-                        '</div>' +
-                        ' <div class="col-sm-4">' +
-                        '<center>' +
-                        ' <button type="button" class="btn btn-outline-success"><i class="fa fa-phone" onclick=""></i></button>' +
+                          '<button type="button" class="btn btn-outline-warning " id="chatclick"><i class="fa fa-comment" onclick="chat()"></i></button>' +
+                          '</center>' +
+                          ' </div>' +
+                          '</div>' +
+                          '</div>' +
+                          ' </ons-card>'
 
-                        '<button type="button" class="btn btn-outline-warning " id="chatclick"><i class="fa fa-comment" onclick="chat()"></i></button>' +
-                        '</center>' +
-                        ' </div>' +
-                        '</div>' +
-                        '</div>' +
-                        ' </ons-card>'
+                        )
+                      }
+                  }
 
-                      )
-                    }
 
                   });
-                })
+            })
+
 
             }
 
             showListDoingFix();
+
+            function DoneFix() {
+              
+              firestore.collection("requestFix").where("namestore", "==", namestore_requert)
+                .onSnapshot(function (snapshot) {
+                  snapshot.docChanges().forEach(function (change) {
+                    if (change.type === "removed") {
+
+                    } else {
+                      if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 2) {
+                        console.log("Modified modified requestFix: ", change.doc.data());
+                        // var html 
+
+                        $('#showfixlist').append('')
+                        ons.notification.prompt('Prompt!')
+                          .then(function (input) {
+                            var message = input ? 'Entered: ' + input : 'Entered nothing!';
+                            ons.notification.alert(message);
+                          });
+                      }
+                  }
+
+
+                  });
+            })
+
+
+            }
+            DoneFix();
+
+
 
             // function review() {
             //   var namestore_review = localStorage.getItem("nammestore");
@@ -154,18 +199,18 @@
             //     .onSnapshot(function (snapshot) {
             //       snapshot.docChanges().forEach(function (change) {
             //         if (change.type == "modified" || change.type === "added") {
-            //            if ( change.doc.data().done == 2) {
-            //           console.log("Modified modified requestFix: ", change.doc.data());
-                      
-            //           ons.notification.prompt('Prompt!')
-            //             .then(function (input) {
-            //               var message = input ? 'Entered: ' + input : 'Entered nothing!';
-            //               ons.notification.alert(message);
-            //             });
-            //         }
+            //           if (change.doc.data().done == 2) {
+            //             console.log("Modified modified requestFix: ", change.doc.data());
+
+            //             ons.notification.prompt('Prompt!')
+            //               .then(function (input) {
+            //                 var message = input ? 'Entered: ' + input : 'Entered nothing!';
+            //                 ons.notification.alert(message);
+            //               });
+            //           }
 
             //         }
-                   
+
 
             //       });
 
@@ -180,12 +225,10 @@
             //     });
             // };
             // review();
+            // window.reload = timedRefresh(30000);
           </script>
+
           <div class="content" id="map" style="width: 100%; height: 100%"> </div>
-
-
-
-
 
           <!-- <ons-card id="map" style="width: 95%; height : 120% ;" > -->
 
@@ -203,10 +246,16 @@
             <div class="left">
               <ons-back-button>Back</ons-back-button>
             </div>
-            <div class="center"> รายละเอียดร้าน</div>
+            <div class="center" style="text-align: center; font-family: 'Luckiest Guy', cursive; font-size: 24px;">
+              Details</div>
           </ons-toolbar>
-          <ons-card>
-            <!-- ==========Carousal========== -->
+          <!-- <ons-card style="background-color:  rgb(238, 238, 238);"> -->
+          <!-- ==========Carousal========== -->
+
+
+
+          <ons-card style="background-color:  rgb(255, 255, 255);">
+
             <ons-carousel fullscreen swipeable auto-scroll overscrollable id="carousel" style="height: 170px;">
               <ons-carousel-item
                 style="background: url('https://www.thairath.co.th/media/4DQpjUtzLUwmJZZPD15TX0i2J7gu4aL4Jy5bOehYBSEJ.jpg') no-repeat center; background-size: contain;">
@@ -222,159 +271,204 @@
               </ons-carousel-item>
             </ons-carousel>
 
-            <center>
-              <section style="padding: 10px">
+            <div class="title" style="margin-top: 20px;">
+              <p id="namestore" style="font-size: 23px;text-align: center;"></p>
+              <p id="address" style="font-size: 17px; font-style: normal; margin-top: -10px; margin-left: 10px;">
+            </div>
+            <ons-list-item>
+              <div class="right" style="font-size: 15px; margin-top: -65px;">
+                สถานะร้าน &nbsp; <div id="status"></div>
+                <script>
+                  ////=============================ฟังก์ชั่น เรียกช่างซ่อมรถ =========================================================
+                  function requestFix() {
+                    var CusName = localStorage.getItem("displayName");
+                    var namestore = localStorage.getItem("namestore");
+
+                    firebase.firestore().collection('requestFix').add({
+                      customer: CusName,
+                      namestore: namestore,
+                      request: 1,
+                      accept: 0,
+                      done: 0
+                    }).then(function (docRef) {
+                      console.log("requestFix  " + docRef.id + " success");
+                      firebase.firestore().collection('requestFix').doc(docRef.id).update({
+                        fixID: docRef.id
+
+                      })
+                    })
+
+                    showModal();
+
+                  }
+                </script>
+              </div>
+            </ons-list-item>
+            </div>
+            <!-- <center style="margin-top: -30px;">
+              <section style="padding: -10px">
 
                 <button type="button" id="requestFix" class="btn btn-lg btn-outline-success"
-                  onclick="requestFix()">เรียกซ่อม&nbsp; <i class="material-icons">build</i></button>
+                  onclick="requestFix()">Repair&nbsp; <i class="material-icons">build</i></button>
 
-                <button type="button" class="btn btn-lg btn-outline-primary" id="btn-map" onclick="myNavFunc()">นำทาง
+                <button type="button" class="btn btn-lg btn-outline-primary" id="btn-map" onclick="myNavFunc()">Navigate
                   &nbsp;<i class="fa fa-compass"></i></button>
               </section>
 
+            </center> -->
+            <center style="margin-top: -30px;">
+              <section style="padding: -10px">
+
+                <button type="button" id="requestFix" class="btn btn-lg btn-outline-success"
+                  onclick="requestFix()">Repair&nbsp; <i class="material-icons">build</i></button>
+
+                <button type="button" class="btn btn-lg btn-outline-primary" id="btn-map" onclick="myNavFunc()">Navigate
+                  &nbsp;<i class="fa fa-compass"></i></button>
+              </section>
             </center>
-
-            <ons-card style="background-color:  #d4d4d1;">
-              <div class="title">
-                <p id="namestore" style="font-size: 16px"></p>
-                <p id="address" style="font-size: 12px; font-style: normal">
-              </div>
-              <ons-list-item>
-                <div class="right" style="font-size: 12px;">
-
-                  สถานะร้าน &nbsp; <div id="status" ></div>
-                  <script>
-                    //============================ เช็คสถานะร้าน ว่าเปิดหรือปิด ==================================================
-                    // var namestore_getstatus = localStorage.getItem("namestore");
-                    // var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
-                    // firebaseRef.get().then(function (doc) {
-                     
-                    //     if ( doc.data().namestore == namestore_getstatus && doc.data().status == "on") {
-                    //       document.getElementById("status").innerHTML = "Open";
-                    //       document.getElementById("status").style.color = "#008000";
-
-
-                    //     } else {
-                    //       document.getElementById("status").innerHTML = "Close";
-                    //       document.getElementById("status").style.colorr = "#FF0000";
-
-
-                    //     }
-                      
-
-                    // });
-              
-                    
-
-                //     firestore.collection("Technicians").onSnapshot(function (snapshot) {
-                //   snapshot.docChanges().forEach(function (change) {
-                //    if (change.type == "modified" ) {
-
-                //     console.log("Modified modified Status: ", change.doc.id);
-                    
-                //     if (namestore_getstatus != change.doc.id  ) {
-
-                //       console.log( "namestore_getstatus::"+namestore_getstatus+","+"change.doc.id"+ change.doc.id);
-                      
-                //       if (change.doc.data().status == "on") {
-                //       document.getElementById("status").innerHTML = "Open";
-                //       document.getElementById("status").style.color = "#008000";
-                      
-                //     }else{
-
-                //       document.getElementById("status").innerHTML = "Close";
-                //           document.getElementById("status").style.colorr = "#FF0000";
-                //     }
-                //     }
-          
-                      
-                //    }
-                      
-                    
-                   
-                //   });
-                // })
-
-                    // var firestoreRef = firestore.collection("Technicians").doc(namestore_getstatus)
-                    //   .onSnapshot(function (doc) {
-
-                    //     var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-                    //     console.log(source, " data: ", doc.data().status);
-
-                    //     var firebaseRef = firestore.collection("Technicians").doc(namestore_getstatus);
-                    //     firebaseRef.get().then(function (doc) {
-                  
-                    //         if (  doc.data().namestore == namestore_getstatus &&doc.data().status == "on") {
-                    //           document.getElementById('status').innerHTML = "Open";
-                    //           document.getElementById("status").style.color = "#008000";
-
-                    //           document.getElementById("requestFix").disabled = false;
-                    //         } else {
-                    //           document.getElementById('status').innerHTML = "Close";
-                    //           document.getElementById("status").style.color = "#FF0000";
-
-                    //           document.getElementById("requestFix").disabled = true;
-                    //         }
-
-
-
-
-                    //     });
-
-                    //   });
-                    ////=============================ฟังก์ชั่น เรียกช่างซ่อมรถ =========================================================
-
-
-                    function requestFix() {
-                      var CusName = localStorage.getItem("displayName");
-                      var namestore = localStorage.getItem("namestore");
-
-                      firebase.firestore().collection('requestFix').add({
-                        customer: CusName,
-                        namestore: namestore,
-                        request: 1,
-                        accept: 0,
-                        done: 0
-                      }).then(function (docRef) {
-                        console.log("requestFix  " + docRef.id + " success");
-                        firebase.firestore().collection('requestFix').doc(docRef.id).update({
-                          fixID: docRef.id
-
-                        })
-                      })
-
-                      showModal();
-
-                    }
-                  </script>
-                </div>
-
-              </ons-list-item>
-              </div>
-            </ons-card>
           </ons-card>
+          <!--             
+          </ons-card> -->
           <!-- ons-cord review -->
           <ons-card>
+            <!-- <p style="font-size: 25px">Review</p> -->
+
+            <ons-list-header style="font-size: 25px">Review</ons-list-header>
+
+
+            <div style="margin-top: -10px">
+              <ons-list-item style="font-size: 10pt">
+                <div class="col-2" style="margin-left: -20px;">
+                  <img class="list-item__thumbnail" src="https://placekitten.com/g/40/40"
+                    style="width: 30px; height: 30px;">
+                </div>
+                <div class="col-6" style="margin-left: -10px;">
+                  <span class="list-item__title" style=" font-size: 10pt;">Cutest kitty</span>
+                </div>
+                <div class="col-4" style="margin-right: -10px;">
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                </div>
+                <div>
+                  <p style="font-size: 11pt; margin-top: 8px;">
+                    FIX IT คือแอพที่ใช้เพื่อเรียกขอรับบริการซ่อมรถนอกสถานที่จากช่างซ่อม
+                    เพื่อความสะดวกสบายแก่ผู้ขับขี่รถจักรยานยนต์
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: 7pt; margin-top: -12px;">
+                    29/11/2562 12:05 | รายการซ่อม : fgdgdfg75757
+                  </p>
+
+                </div>
+              </ons-list-item>
+              <!-- <hr style="margin-top: -10px;"> -->
+            </div>
+
+
+            <div style="margin-top: -10px">
+              <ons-list-item style="font-size: 10pt">
+                <div class="col-2" style="margin-left: -20px;">
+                  <img class="list-item__thumbnail" src="https://placekitten.com/g/40/40"
+                    style="width: 30px; height: 30px;">
+                </div>
+                <div class="col-6" style="margin-left: -10px;">
+                  <span class="list-item__title" style=" font-size: 10pt;">Cutest kitty</span>
+                </div>
+                <div class="col-4" style="margin-right: -10px;">
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                </div>
+                <div>
+                  <p style="font-size: 11pt; margin-top: 8px;">
+                    FIX IT คือแอพที่ใช้เพื่อเรียกขอรับบริการซ่อมรถนอกสถานที่จากช่างซ่อม
+                    เพื่อความสะดวกสบายแก่ผู้ขับขี่รถจักรยานยนต์
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: 7pt; margin-top: -12px;">
+                    29/11/2562 12:05 | รายการซ่อม : fgdgdfg75757
+                  </p>
+
+                </div>
+              </ons-list-item>
+              <hr style="margin-top: -10px;">
+            </div>
+
+
+            <div style="margin-top: -10px">
+              <ons-list-item style="font-size: 10pt">
+                <div class="col-2" style="margin-left: -20px;">
+                  <img class="list-item__thumbnail" src="https://placekitten.com/g/40/40"
+                    style="width: 30px; height: 30px;">
+                </div>
+                <div class="col-6" style="margin-left: -10px;">
+                  <span class="list-item__title" style=" font-size: 10pt;">Cutest kitty</span>
+                </div>
+                <div class="col-4" style="margin-right: -10px;">
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                  <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                </div>
+                <div>
+                  <p style="font-size: 11pt; margin-top: 8px;">
+                    FIX IT คือแอพที่ใช้เพื่อเรียกขอรับบริการซ่อมรถนอกสถานที่จากช่างซ่อม
+                    เพื่อความสะดวกสบายแก่ผู้ขับขี่รถจักรยานยนต์
+                  </p>
+                </div>
+                <div>
+                  <p style="font-size: 7pt; margin-top: -12px;">
+                    29/11/2562 12:05 | รายการซ่อม : fgdgdfg75757
+                  </p>
+
+                </div>
+              </ons-list-item>
+              <hr style="margin-top: -10px;">
+            </div>
+
+
+          </ons-card>
+          <ons-card>
+
             <p style="font-size: 25px">Review</p>
-            <ons-card style="background-color: #ffe96d ;">
 
-              <div class="title">
-                <p style="font-size: 16px">นายเอ้ นามสมมติ</p>
-                <p style="font-size: 12px; font-style: normal">ถูกและดี ราคาเป็นกันเอง ช่างซ่อมหล่อมาก<p>
-              </div>
-
-            </ons-card>
-            <ons-card style="background-color: #ffe96d;">
-
-              <div class="title">
-                <p style="font-size: 16px">นางสาวพลัด นามสมมติ</p>
-                <p style="font-size: 12px; font-style: normal">ช่างซ่อมเป็นกันเองมาก <p>
-              </div>
-
-            </ons-card>
+            <div id="showreview"></div>
+            <img src="" alt="">
           </ons-card>
 
+          <script>
 
+            var reviewstore = localStorage.getItem("namestore");
+            firestore.collection("Technicians").doc(reviewstore).collection("review").where("namestore", "==", reviewstore)
+              .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                  if (change.type === 'removed') {
+
+                  } else {
+                    console.log("rrrrrr" + change.doc.data().rating);
+                    $('#showreview').append(
+                      '<ons-card style="background-color: #ffe96d ;">' +
+
+                      '<div class="title">' +
+                      '<p style="font-size: 16px">' + change.doc.data().customer + '</p>' +
+                      '<p style="font-size: 12px; font-style: normal">' + change.doc.data().reviewtext + '<p>' +
+                      '</div>' +
+
+                      '</ons-card>'
+
+
+
+                    )
+                  }
+
+                });
+              });
+          </script>
 
           <!-- Loading -->
           <ons-modal direction="up">
@@ -407,24 +501,17 @@
               firestore.collection("requestFix").where("namestore", "==", namestore_requert)
                 .onSnapshot(function (snapshot) {
                   snapshot.docChanges().forEach(function (change) {
-                    if (change.type === "added" && change.doc.data().accept == 0) {
-                      console.log("Added added requestFix: ", change.doc.data());
-                    }
-                    if (change.type === "modified") {
+
+                    if (change.type === "removed") {
+                      console.log("Removed removed requestFix: ", change.doc.data());
+                    } else {
                       console.log("Modified modified requestFix: ", change.doc.data());
                       if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 1) {
                         showAlertacceptFix();
                       } else if (change.doc.data().accept == 2 && change.doc.data().request == 2 && change.doc.data().done == 0) {
                         showAlertcanceltFix();
                       }
-                      // console.log("change.doc.data() ==>" + change.doc.data().accept);
-                      // var accept = change.doc.data().accept;
-                      // localStorage.setItem('FixID', change.doc.data().fixID);
 
-                      // createAlertDialog3();
-                    }
-                    if (change.type === "removed") {
-                      console.log("Removed removed requestFix: ", change.doc.data());
                     }
                   });
                 })
@@ -432,7 +519,12 @@
 
             var showAlertacceptFix = function () {
               var namestore_alert = localStorage.getItem("namestore");
-              ons.notification.alert('ร้าน :' + namestore_alert + "รับซ่อมแล้วร้านกำลังมาคะ ");
+
+              ons.notification.alert(
+
+                'ร้าน :' + namestore_alert + "รับซ่อมแล้วร้านกำลังมาคะ "
+
+              );
             };
 
             var showAlertcanceltFix = function () {
@@ -441,6 +533,31 @@
                 "ปธิเสธการรับซ่อม");
             };
           </script>
+          <!-- <ons-bottom-toolbar style="height: 55px; color:white; background-color: hsl(0, 100%, 2%);" class="bottom-bar">
+              <ons-row>
+                  <ons-col width="50%" style="padding: 10px; font-size: 20px; text-align: center;">
+                      <b>Your Order : ฿</b>
+                  </ons-col>
+                  <ons-col width="50%" style="padding-top: -55px; padding-right: 20px; padding-bottom: 50px; text-align: right; flex: 0 0 50%; max-width: 50%;">
+                      <ons-button id="order-btn" style="background-color: white;color: rgb(36, 33, 33)" modifier="material" ripple="" class="button button--material">
+                       
+                      Order
+                    </ons-button>
+                  </ons-col>
+              </ons-row>
+          </ons-bottom-toolbar> -->
+
+          <!-- <ons-bottom-toolbar style="width: 100%;" >
+    <ons-row >
+        <ons-col style="width: 40px; background-color: rgb(0, 81, 255);">
+            dddd
+        </ons-col>
+        <ons-col style="width: 60px; background-color: #FFE200; text-align: center;" >
+         Repair &nbsp; <i class="material-icons">build</i>
+        </ons-col>
+    </ons-row>
+  </ons-bottom-toolbar> -->
+
         </ons-page>
 
       </template>
@@ -459,7 +576,7 @@
             </script>
           </ons-toolbar>
           <div class="col-sm-3 col-sm-offset-4 frame">
-            <ul></ul>
+            <ul id="showmessages"> </ul>
             <div>
               <div class="msj-rta macro1">
                 <div class="text text-r" style="background:whitesmoke !important">
@@ -497,7 +614,7 @@
         <ons-card style="background-color: #a5cec3;">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" style="font-size: 18px;">รหัสร้าน &nbsp;</span>
+              <span class="input-group-text" style="font-size: 14px;">รหัสร้าน &nbsp;</span>
             </div>
             <input type="text" aria-label="First name" class="form-control">
           </div>
@@ -568,8 +685,22 @@
           <!-- card profile -->
           <ons-card>
             <script>
+              // function getProfilePicUrl() {
+
+              //   var pic1 = localStorage.getItem("photoURL");
+              //   var pic2 = 'img/user.png';
+              //   var img = document.createElement('img');
+              //   img.src = localStorage.getItem("photoURL");
+
+              //   document.getElementById('profile-pic').appendChild(img);
+
+              //   return pic || 'img/user.png';
+
+
+              // }
               document.getElementById("displayname").innerHTML = localStorage.getItem("displayName");
               var img = document.createElement('img');
+
               img.src = localStorage.getItem("photoURL");
               document.getElementById('profile-pic').appendChild(img);
               console.log(img.src);
@@ -663,7 +794,8 @@
                   <p>แอพพลิเคชันนี้ถูกสร้างขึ้นเป็นส่วนหนึ่งของรายวิชา PROJECT IN SE รหัส 977-491 ภาคเรียนที่ 1/2562</p>
                   <ons-list-item>
                     <div class="left">
-                      <img class="list-item__thumbnail" src="https://qrgo.page.link/3DJo3">
+                      <img class="list-item__thumbnail"
+                        src="https://scontent.fbkk10-1.fna.fbcdn.net/v/t1.0-9/65922349_1191144487754729_3530931659589287936_n.jpg?_nc_cat=110&_nc_eui2=AeFho7yvr8pZo8AlEwL9dcvfhd-1OxetRMx7oFE0mWXmlHrCZkK7ZdBq8qB8NVBogucYMruQEPhuyOI00dH8mlddiDgPLxdKqkYdJ9QpJKyl7Q&_nc_oc=AQk78TfxbNHxapUSZjLErT-Wy2f4kLvqiHDGvK-Etd_RWjLjUjJd3qvkmydPwOSqqEA&_nc_ht=scontent.fbkk10-1.fna&oh=5538976aa36edee38f0c6c93fa3dce95&oe=5E3779C8">
                     </div>
                     <div class="center">
                       <span class="list-item__title">นางสาวณัฐวราภรณ์ ทับเที่ยง</span><span
@@ -672,7 +804,8 @@
                   </ons-list-item>
                   <ons-list-item>
                     <div class="left">
-                      <img class="list-item__thumbnail" src="https://qrgo.page.link/1aVuy">
+                      <img class="list-item__thumbnail"
+                        src="https://scontent.fbkk14-1.fna.fbcdn.net/v/t1.0-9/20708438_915003475314188_731298591761034821_n.jpg?_nc_cat=106&_nc_eui2=AeGWtujPwqrrR96MdDoR1Ry8T7XzQLbJqep5Iq4L2BTxTRBoXvkn4lMZc2pebtjw_uXDx5R7X6NOuj4sWlmYJA5bdYAvMRGhNkkcs5l9b6p8Iw&_nc_oc=AQn3gN1oEYFhYsFwwnOMjYPZvMcwMsm8HTs_fMsSpbTb5jm5XWSCfiy5VtupafHdMv4&_nc_ht=scontent.fbkk14-1.fna&oh=9f038e0b777651d4c634abc83d80cece&oe=5E3D2EAC">
                     </div>
                     <div class="center">
                       <span class="list-item__title">นายพีระนันท์ เรียนมาแทน</span><span
@@ -681,7 +814,8 @@
                   </ons-list-item>
                   <ons-list-item>
                     <div class="left">
-                      <img class="list-item__thumbnail" src="https://qrgo.page.link/r5fUv">
+                      <img class="list-item__thumbnail"
+                        src="https://scontent.fbkk14-1.fna.fbcdn.net/v/t1.0-9/44715851_10212714317308327_723654980958945280_n.jpg?_nc_cat=104&_nc_eui2=AeEdkhFqimnC3b0v3hu47_N0TthtthiTo9msc3vMxisrp875VhL38XxMmxjDiGBTtp4gYdD-EF6oZ7jcfzmtMAZKdhoEnj_6QFLfInF-Ywflkg&_nc_oc=AQkjMWIDntTh0RL0wLLR9ijxlSucIQC12yXKC_aDbhl6wm6aPSfgQzcUT04KSqj7DRc&_nc_ht=scontent.fbkk14-1.fna&oh=e58da7d1508825c2a2f2722330484e94&oe=5E2E059D">
                     </div>
                     <div class="center">
                       <span class="list-item__title">ผศ.ดร.อซีส นันทอมรพงศ์</span><span
@@ -690,7 +824,9 @@
                   </ons-list-item>
                 </div>
               </center>
-              <div style="font-size: 14pt ;margin-right: 15px; margin-bottom: 15px"><a href="tel:0980103837">
+
+              <div style="font-size: 14pt ;margin-right: 15px; margin-bottom: 15px; margin-top: 15px"><a
+                  href="tel:0980103837">
                   <img src="img/telephone.png" style="width: 30px;"></a>&nbsp;ติดต่อเรา</div>
 
               <div style="font-size: 14pt;margin-right: 15px; margin-bottom: 15px"><a
@@ -797,19 +933,19 @@
 
       if (event.index == 0) {
         console.log('map clicked');
-        // get data for map screen  
+        // get data for map screen
         // if (document.getElementById('chatclick').clicked == true) {
         //   alert("button was clicked");
         // }
 
       } else if (event.index == 1) {
         console.log('coins clicked');
-        // get data for coins screen  
+        // get data for coins screen
 
       }
       else if (event.index == 2) {
         console.log('history clicked');
-        // get data for history screen  
+        // get data for history screen
       }
       else if (event.index == 3) {
         console.log('settings clicked');
@@ -828,39 +964,39 @@
       document.querySelector('#myNavigator1').pushPage('detailStore.html');
 
       firestore.collection("Technicians").onSnapshot(function (snapshot) {
-                  snapshot.docChanges().forEach(function (change) {
-          
+        snapshot.docChanges().forEach(function (change) {
 
-                    console.log("Modified modified Status: ", change.doc.id);
-                    
-                    if (name == change.doc.id  ) {
 
-                      console.log( "name::"+name+","+"change.doc.id"+ change.doc.id);
-                      
-                      if (change.doc.data().status == "on") {
-                      document.getElementById("status").innerHTML = "Open";
-                      document.getElementById("status").style.color = "#008000";
-                      document.getElementById("requestFix").disabled = false;
-                    }else{
+          console.log("Modified modified Status: ", change.doc.id);
 
-                      document.getElementById("status").innerHTML = "Close";
-                          document.getElementById("status").style.color = "#FF0000";
-                          document.getElementById("requestFix").disabled = true;
-                    }
+          if (name == change.doc.id) {
 
-                    }else{
-                      document.getElementById("status").innerHTML = "";
-                          document.getElementById("status").style.color = "#FFFFFF";
+            console.log("name::" + name + "," + "change.doc.id" + change.doc.id);
 
-                    }
-          
-                      
-                   
-                      
-                    
-                   
-                  });
-                })
+            if (change.doc.data().status == "on") {
+              document.getElementById("status").innerHTML = "Open";
+              document.getElementById("status").style.color = "#008000";
+              document.getElementById("requestFix").disabled = false;
+            } else {
+
+              document.getElementById("status").innerHTML = "Close";
+              document.getElementById("status").style.color = "#FF0000";
+              document.getElementById("requestFix").disabled = true;
+            }
+
+          } else {
+            document.getElementById("status").innerHTML = "";
+            document.getElementById("status").style.color = "#FFFFFF";
+
+          }
+
+
+
+
+
+
+        });
+      })
       firestore.collection("Technicians").doc(name).get().then(function (doc) {
 
         var namestoreclick = localStorage.setItem('namestore', name);
@@ -868,7 +1004,7 @@
 
 
         document.getElementById('namestore').innerHTML = name;
-        document.getElementById('address').innerHTML = doc.data().address;
+        document.getElementById('address').innerHTML = "Address : " + doc.data().address;
 
       });
       // console.log(doc.data());
