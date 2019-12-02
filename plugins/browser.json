@@ -25,9 +25,6 @@
     "cordova-plugin-buildinfo": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-universal-links-plugin": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "cordova-plugin-browsertab": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
@@ -39,6 +36,12 @@
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-local-notification": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-universal-links-plugin": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-camera": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },

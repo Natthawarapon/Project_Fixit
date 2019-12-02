@@ -39,6 +39,9 @@
         <param name="android-package" value="com.nordnetab.cordova.ul.UniversalLinksPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
     <name>Fix it </name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -55,5 +58,12 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
+    <splash density="port-hdpi" src="res/screen/android/splash-land-hdpi.png" />
+    <splash density="port-ldpi" src="res/screen/android/splash-land-ldpi.png" />
+    <splash density="port-mdpi" src="res/screen/android/splash-land-mdpi.png" />
+    <splash density="port-xhdpi" src="res/screen/android/splash-land-xhdpi.png" />
+    <icon density="ldpi" src="res/icon/android/logo-36.png" />
+    <icon density="mdpi" src="res/icon/android/logo-48.png" />
+    <icon density="hdpi" src="res/icon/android/logo-72.png" />
     <preference name="loglevel" value="DEBUG" />
 </widget>

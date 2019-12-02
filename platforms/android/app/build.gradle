@@ -28,6 +28,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
+        
     }
 }
 
@@ -299,7 +300,9 @@ dependencies {
     implementation(project(path: ":CordovaLib"))
     implementation "com.android.support:customtabs:23.3.0"
     implementation "com.android.support:support-v4:26.+"
+    implementation "com.android.support:support-v4:27.+"
     // SUB-PROJECT DEPENDENCIES END
+
 }
 
 def promptForReleaseKeyPassword() {
@@ -361,3 +364,5 @@ for (def func : cdvPluginPostBuildExtras) {
 if (hasProperty('postBuildExtras')) {
     postBuildExtras()
 }
+
+apply plugin: 'com.google.gms.google-services'

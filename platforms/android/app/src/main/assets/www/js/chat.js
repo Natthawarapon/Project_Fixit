@@ -3,7 +3,7 @@ var me = {};
   
 function getProfilePicUrl() {
   // TODO 4: Return the user's profile pic URL.
-      
+
 var pic = localStorage.getItem("photoURL");  
   return pic || 'img/user.png';
 }
@@ -27,35 +27,42 @@ you.avatar = "img/man.png";
 function loadMessage() {
   var FixID = localStorage.getItem("FixID");
   var displayNamechat = localStorage.getItem("displayName");
-  var query = firestore.collection('messages').doc(FixID).collection('msg').orderBy('timestamp', 'asc').limit(12);
+
+  var query = firestore.collection('messages').doc(FixID).collection('msg').orderBy('timestamp', 'asc');
 console.log("query"+query);
 query.onSnapshot(function (snapshot) {
   snapshot.docChanges().forEach(function (change) {
+
+    console.log(snapshot.size);
+    
     if (change.type === 'removed') {
-     
-    } else {
+    }  
+    if (change.type === "added") {
       var text = change.doc.data().text;
-      var time = change.doc.data().time;
+     console.log("timestamp:"+change.doc.data().timestamp);
+      var datetime = change.doc.data().dateTime;
+   
+   
+      
+      // datetime = datetime.toUTCString();
+      // datetime = datetime.split(' ').slice(0, 5).join(' ');
       var who ;
     if (change.doc.data().who == displayNamechat ) {
       who = "me";
     }
-     
-  
-  
+
     if (who == "me") {
-  
+
+      console.log("1");
       $('#showmessages').append(
         '<li style="width:100%;">' +
         '<div class="msj-rta macro">' +
         '<div class="text text-r">' +
         '<p>' + text + '</p>' +
-        '<p style="font-size:15px"><small id="date">' + time + '</small></p>' +
+        '<p style="font-size:15px"><small id="date">' + datetime + '</small></p>' +
         '</div>' +
         '<div class="avatar" style="padding:0px 0px 0px 10px !important"><img class="img-circle" style="width:100%;" src="' + me.avatar + '" /></div>' +
         '</li>').scrollTop('#showmessages').prop('scrollHeight')
-
-  
     } else {
       
       $('#showmessages').append( '<li style="width:100%">' +
@@ -63,12 +70,11 @@ query.onSnapshot(function (snapshot) {
         '<div class="avatar"><img class="img-circle" style="width:100%;" src="' + you.avatar + '" /></div>' +
         '<div class="text text-l">' +
         '<p>' + text + '</p>' +
-        '<p style="font-size:15px"><small >' + time + '</small></p>' +
+        '<p style="font-size:15px"><small >'+ datetime + '</small></p>' +
         '</div>' +
         '</div>' +
         '</li>').scrollTop('#showmessages').prop('scrollHeight')
     }
-    
     
     }
    
@@ -77,55 +83,41 @@ query.onSnapshot(function (snapshot) {
 }
 
 
-// setTimeout(
-//   function () {
-//     $('#showmessages').append(control).scrollTop($('#showmessages').prop('scrollHeight'));
- 
-//   } );
 
-function resetChat() {
-  $("ul").empty();
-}
-
-
-$(".mytext").on("keydown", function (e) {
-  if (e.which == 13) {
-    var text = $(this).val();
-    if (text !== "") {
+document.getElementById("btn-chat").addEventListener("click", function() {
+  var messenger = document.getElementById("mytext").value;
+  console.log("messenger::"+messenger);
+  if (messenger !== "") {
+    
       var FixID = localStorage.getItem("FixID");
-
-  var date = new Date();
-  var time =  date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "::" + date.toLocaleTimeString();
-  firebase.firestore().collection('messages').doc(FixID).collection('msg').add({
-  text : text ,
-  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-  time : time,
-  who : getUserName(),
-  pic : getProfilePicUrl()
-  
-  }).catch(function(error) {
-  console.error('Error writing new message to Firebase Database', error);
-  });
-  
+      var d = new Date().toLocaleString();
+      d = d.split(' ').slice(0, 5).join(' ');
+      firebase.firestore().collection('messages').doc(FixID).collection('msg').add({
+      text : messenger ,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      who : getUserName(),
+      pic : getProfilePicUrl(),
+      dateTime : d
+      }).catch(function(error) {
+      console.error('Error writing new message to Firebase Database', error);
+      });
       
-  
-      $(this).val('');
+      document.getElementById("mytext").value = '';
+      
+        
     }
-  }
+
 });
 
+  
 
 
 
 
 
-$('body > div > div > div:nth-child(2) > span').click(function () {
-  $(".mytext").trigger({ type: 'keydown', which: 13, keyCode: 13 });
-})
 
 
 
-resetChat();
 
 
 

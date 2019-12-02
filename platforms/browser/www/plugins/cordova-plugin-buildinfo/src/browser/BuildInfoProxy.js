@@ -35,7 +35,7 @@ BuildInfoProxy = {
 
         try {
             /* <EMBED_CODE> */
-            const json = {"debug":true,"buildDate":"2019-11-22T07:41:48.733Z","packageName":"io.cordova.hellocordova","basePackageName":"io.cordova.hellocordova","name":"Fix it","displayName":"Fix it","version":"1.0.0","versionCode":"1.0.0"};
+            const json = {"debug":true,"buildDate":"2019-12-02T17:49:34.960Z","packageName":"io.cordova.hellocordova","basePackageName":"io.cordova.hellocordova","name":"Fix it","displayName":"Fix it","version":"1.0.0","versionCode":"1.0.0"};
             /* </EMBED_CODE> */
 
             var ret = {

@@ -5,7 +5,10 @@
     <title>Sign Up</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <!-- onsenui link  -->
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
@@ -31,10 +34,6 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--===============================================================================================-->
 
-    <script>
-
-
-    </script>
 </head>
 
 <body>
@@ -57,7 +56,8 @@
                     </span>
 
                     <div class="wrap-input100 validate-input m-b-10">
-                        <input class="input100" type="text" name="username" placeholder="Username" id="username">
+                        <input class="input100" type="text" name="username" placeholder="Username" id="username"
+                            required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-user"></i>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input m-b-10">
-                        <input class="input100" type="text" name="email" placeholder="Email" id="email">
+                        <input class="input100" type="text" name="email" placeholder="Email" id="email" required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-envelope"></i>
@@ -93,9 +93,11 @@
                         </span>
                     </div>
 
+
+
                     <div class="container-login100-form-btn p-t-10">
                         <button id="submit" class="login100-form-btn">
-                            Sign up
+                            Register
                         </button>
 
                     </div>
@@ -145,43 +147,53 @@
             const email_text = email.value;
             const nphone_text = nphone.value;
             const password_text = pass1.value;
+            const password_text2 = pass2.value
+            const profile = "";
 
+            if (username_text == "" || email_text=="" ||nphone_text=="" || password_text=="" || password_text2=="") {
+                ons.notification.alert('กรอกข้อมูลไม่ครบคะ ');
+            
+            }
 
-            firebase.auth().createUserWithEmailAndPassword(email_text, password_text).catch(function (error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
+            if (password_text == password_text2) {
 
-                console.log(error);
-            }).then(function (sendEmailVerify) {
-                if (sendEmailVerify === false) {
-                    return false
-                } else {
-                    firebase.auth().currentUser.sendEmailVerification();
+                firebase.auth().createUserWithEmailAndPassword(email_text, password_text).catch(function (error) {
 
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+
+                    console.log(error);
+                }).then(function () {
                     firestore.collection("Users").get().then(function (querySnapshot) {
 
                         firestore.collection('Users').doc(email_text).set({
 
                             user: username_text,
                             email: email_text,
-                            nphone: nphone_text
+                            nphone: nphone_text,
+                            profile: ""
+
 
                         }).then(function () {
                             console.log("Status saved!");
 
                             window.location.href = "sign-in.html";
+
                         }).catch(function (error) {
                             console.log("Got an Error: ", error);
-
+                      
                         });
                     });
-                    return true;
-                }
 
-            })
 
+
+                })
+
+
+
+        }
+        
         });
-
 
     </script>
 

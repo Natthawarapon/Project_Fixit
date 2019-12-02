@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
+
     <name>Fix it </name>
+
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -20,10 +23,24 @@
      <!-- <uses-permission android:name="android.permission.GEOLOCATION" /> -->
     <platform name="android">
         <allow-intent href="market:*" />
+       <!-- you can use any density that exists in the Android project -->
+  
+    <splash src="res/screen/android/splash-land-hdpi.png" density="port-hdpi"/>
+    <splash src="res/screen/android/splash-land-ldpi.png" density="port-ldpi"/>
+    <splash src="res/screen/android/splash-land-mdpi.png" density="port-mdpi"/>
+    <splash src="res/screen/android/splash-land-xhdpi.png" density="port-xhdpi"/> 
+
+        <icon src="res/icon/android/logo-36.png" density="ldpi" />
+        <icon src="res/icon/android/logo-48.png" density="mdpi" />
+        <icon src="res/icon/android/logo-72.png" density="hdpi" />
+
     </platform>
+
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    
+
+
+ 
 </widget>

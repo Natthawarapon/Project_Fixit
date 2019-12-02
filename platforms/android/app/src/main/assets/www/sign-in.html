@@ -28,6 +28,11 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<!--===============================================================================================-->
+	<!-- onsenui link  -->
+	<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+	<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+	<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  
 
 </head>
 
@@ -63,7 +68,7 @@
 					</span>
 
 					<div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
-						<input class="input100" type="text" placeholder="Email" id="username">
+						<input class="input100" type="text" placeholder="Email" id="username"  >
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-envelope"></i>
@@ -110,7 +115,6 @@
 			</div>
 		</div>
 		<div id="display-name">
-
 		</div>
 	</ons-page>
 
@@ -121,15 +125,29 @@
 		var login = function () {
 			var username = document.getElementById('username').value;
 			var password = document.getElementById('password').value;
+			localStorage.setItem('userlogin',username)
 			firebase.auth().signInWithEmailAndPassword(username, password).catch(function (error) {
 				// Handle Errors here.
 				var errorCode = error.code;
 				var errorMessage = error.message;
 				console.log(error.code + ':' + error.message);
-				ons.notification.alert('Login faild');
+				ons.notification.alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
 				// ...
 			});
+			firebase.auth().onAuthStateChanged(function (user) {
+			if (user) {
+	
+			var email = user.getemail;
+			var uid = user.getuid;
+			var displayName = user.displayName;
+			var photoURL = user.photoURL;
+			var phoneNumber = user.phoneNumber;
+			var providerData = user.providerData;
 
+
+			window.location.href = 'index.html';
+		} 
+	})
 		};
 
 
@@ -151,7 +169,22 @@
 				console.log(user);
 
 				var displayName = localStorage.setItem('displayName', user.displayName);
+
 				var photoURL = localStorage.setItem('photoURL', user.photoURL + "?height=200");
+				var nphone_text ="";
+				var email_text ="";
+				firestore.collection('Users').set({
+
+					user: user.displayName,
+					email: email_text,
+					nphone: nphone_text,
+					profile : user.photoURL
+
+				}).then(function () {
+					console.log("Status saved!");
+
+			
+				})
 
 				// The signed-in user info.
 				var user = result.user;
@@ -200,19 +233,20 @@
 
 
 
-		firebase.auth().onAuthStateChanged(function (user) {
-			if (user) {
-				var email = user.getemail;
-				var uid = user.getuid;
-				var displayName = user.displayName;
-				var photoURL = user.photoURL;
-				var phoneNumber = user.phoneNumber;
-				var providerData = user.providerData;
+		// firebase.auth().onAuthStateChanged(function (user) {
+		// 	if (user) {
+	
+		// 		var email = user.getemail;
+		// 		var uid = user.getuid;
+		// 		var displayName = user.displayName;
+		// 		var photoURL = user.photoURL;
+		// 		var phoneNumber = user.phoneNumber;
+		// 		var providerData = user.providerData;
 
 
-				window.location.href = 'index.html';
-			}
-		});
+		// 		window.location.href = 'index.html';
+		// 	}
+		// });
 	</script>
 
 
