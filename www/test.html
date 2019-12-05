@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>We GEO</h1>
+    <p>LAT : <span></span></p>
+    <p>LNG : <span></span></p>
+    <p>Acc <span></span></p>
+    <p>HED<span></span></p>
+    <p>SP <span></span></p>
+    <p>AL <span></span></p>
+    <p>Time <span></span></p>
+    <script>
+        let G, options, spans;
+
+document.addEventListener('DOMContentLoaded', init);
+
+function init(){
+    if(navigator.geolocation){
+        let giveUp = 1000 * 30;  //30 seconds
+        let tooOld = 1000 * 60 * 60;  //one hour
+        options ={
+            enableHighAccuracy: true,
+            timeout: giveUp,
+            maximumAge: tooOld
+        }
+        
+        navigator.geolocation.getCurrentPosition(gotPos, posFail, options);
+    }else{
+        //using an old browser that doesn't support geolocation
+    }
+}
+
+function gotPos(position){
+    spans = document.querySelectorAll('p span');
+    spans[0].textContent = position.coords.latitude;
+    spans[1].textContent = position.coords.longitude;
+    spans[2].textContent = position.coords.accuracy;
+    
+    spans[6].textContent = position.timestamp;
+}
+
+function posFail(err){
+    //err is a number
+    let errors = {
+        1: 'No permission',
+        2: 'Unable to determine',
+        3: 'Took too long'
+    }
+    document.querySelector('h1').textContent = errors[err];
+}
+        </script>
+</body>
+</html>

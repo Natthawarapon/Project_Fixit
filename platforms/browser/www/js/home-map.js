@@ -29,20 +29,21 @@ firestore.collection("Technicians").get().then(function (querySnapshot) {
     console.log(doc.id, " => ", doc.data());
 
     console.log("lat :" + doc.data().latitude, "long : " + doc.data().longitude);
-    
-    L.marker([doc.data().latitude, doc.data().longitude,11], { icon: ratIcon }).addTo(map).bindPopup(
+   console.log(doc.data().display);
+    if (doc.data().display == "normal") {
+      L.marker([doc.data().latitude, doc.data().longitude,11], { icon: ratIcon }).addTo(map).bindPopup(
       " ชื่อร้าน : " + doc.data().namestore + ";" + '<a id="push-button" onclick="pushPage(' + "'" + doc.data().namestore + "'" + ')">' + "Click" + '</a>').openPopup();
+    }
+    
   });
 });
 
 
 function onLocationFound(e) {
-
   L.marker(e.latlng,8).addTo(map)
-    .bindPopup("You are here! ").openPopup();
+.bindPopup("You are here! ").openPopup(); } 
+map.on('locationfound', onLocationFound);
 
-
-} map.on('locationfound', onLocationFound);
 
 function onLocationError(e) {
   alert(e.message);

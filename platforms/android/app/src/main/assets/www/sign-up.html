@@ -104,21 +104,7 @@
 
 
 
-                    <div class="text-center t02 w-full">
-                        <a class="txt1" href="#">
-                            Or Sign up Using
-
-                        </a>
-                    </div>
-                    <div class="flex-c-m">
-                        <a href="#" class="login100-social-item bg1">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-
-                        <a href="#" class="login100-social-item bg3" onclick="google()">
-                            <i class="fa fa-google"></i>
-                        </a>
-                    </div>
+                   
 
                 </div>
             </div>
@@ -149,6 +135,7 @@
             const password_text = pass1.value;
             const password_text2 = pass2.value
             const profile = "";
+            
 
             if (username_text == "" || email_text=="" ||nphone_text=="" || password_text=="" || password_text2=="") {
                 ons.notification.alert('กรอกข้อมูลไม่ครบคะ ');
@@ -171,7 +158,8 @@
                             user: username_text,
                             email: email_text,
                             nphone: nphone_text,
-                            profile: ""
+                            profile: "",
+                            coin : 0
 
 
                         }).then(function () {

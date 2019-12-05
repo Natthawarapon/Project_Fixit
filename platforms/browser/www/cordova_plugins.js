@@ -190,7 +190,6 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-vibration": "3.1.1",
     "cordova-plugin-splashscreen": "5.0.3",
@@ -203,7 +202,8 @@ module.exports.metadata =
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-universal-links-plugin": "1.2.1",
-    "cordova-plugin-camera": "4.1.0"
+    "cordova-plugin-camera": "4.1.0",
+    "cordova-plugin-geolocation": "4.0.2"
 }
 // BOTTOM OF METADATA
 });

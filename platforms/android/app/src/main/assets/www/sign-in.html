@@ -93,19 +93,11 @@
 
 					<div class="text-center t02 w-full">
 						<a class="txt1" href="#">
-							Or Sign in Using
+							Or
 
 						</a>
 					</div>
-					<div class="flex-c-m">
-						<a href="#" class="login100-social-item bg1" onclick="facebook()">
-							<i class="fa fa-facebook"></i>
-						</a>
-
-						<a href="#" class="login100-social-item bg3" onclick="google()">
-							<i class="fa fa-google"></i>
-						</a>
-					</div>
+				
 					<div class="text-center div-to1 w-full">
 						<a class="t01" href="sign-up.html" style="color:white">
 							Sign Up
@@ -134,6 +126,8 @@
 				ons.notification.alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
 				// ...
 			});
+
+		
 			firebase.auth().onAuthStateChanged(function (user) {
 			if (user) {
 	

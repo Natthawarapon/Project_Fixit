@@ -161,6 +161,7 @@
                         localStorage.setItem('FixIDTest', change.doc.data().fixID);
                         localStorage.setItem('FixIDReview', change.doc.data().fixID);
                         $('#showfixlist').append();
+
                         window.location.reload(true)
 
                         localStorage.removeItem('FixID');
@@ -199,7 +200,7 @@
                   รายการซ่อมเสร็จเรียบร้อยแล้ว
                   ให้คะแนนร้านซ่อม
                 </p>
-                
+
                 <p>
                   <ons-button onclick="GoToReview('my-dialogg')">ให้คะแนน</ons-button>
                 </p>
@@ -245,37 +246,35 @@
           <!-- ==========Carousal========== -->
 
           <script>
-              var reviewstore = localStorage.getItem("namestore");
-             firestore.collection("Technicians").doc(reviewstore).collection("review").where("namestore", "==", reviewstore)
-               .onSnapshot(function (snapshot) {
-               
-                     var arrrating =[];
-                     var rating ;
-                 snapshot.docChanges().forEach(function (change) {
-              
-                   
-                   if (change.type === 'removed') {
- 
-                   } else {
-                     var rating = parseInt(change.doc.data().rating);
-                     arrrating.push(rating );
-                   
-                   
-                   
-                   }
-                   console.log(arrrating);
-                 return arrrating;
-                 });
-                
-                 avgRating= arrrating.reduce((a, b) => a + b, 0) / arrrating.length
-                      
-                   $('#showrating').append(
-                       '<div style="font-size: 15px; color: rgb(235, 185, 22); margin-left: 65px ; margin-top: -23px;">'+avgRating +'</div>'
-                       
-                     )
-                 
-               });
-              </script>
+            var reviewstore = localStorage.getItem("namestore");
+            firestore.collection("Technicians").doc(reviewstore).collection("review").where("namestore", "==", reviewstore)
+              .onSnapshot(function (snapshot) {
+
+                var arrrating = [];
+                var rating;
+                snapshot.docChanges().forEach(function (change) {
+
+
+                  if (change.type === 'removed') {
+
+                  } else {
+                    var rating = parseInt(change.doc.data().rating);
+                    arrrating.push(rating);
+
+                  }
+                  console.log(arrrating);
+                  return arrrating;
+                });
+
+                avgRating = arrrating.reduce((a, b) => a + b, 0) / arrrating.length
+
+                $('#showrating').append(
+                  '<div style="font-size: 15px; color: rgb(235, 185, 22); margin-left: 65px ; margin-top: -23px;">' + avgRating + '</div>'
+
+                )
+
+              });
+          </script>
 
           <ons-card style="background-color:  rgb(255, 255, 255);">
 
@@ -297,73 +296,75 @@
             <div class="title" style="margin-top: 20px;">
               <p id="namestore" style="font-size: 23px;text-align: center;"></p>
               <p id="address" style="font-size: 17px; font-style: normal; margin-top: -10px; margin-left: 10px;">
-            </div> 
-            
-            <div class="left" id="showrating" style="font-size: 15px; color: rgb(3, 3, 3);margin-left: 10px;">rating :</div>
+            </div>
+
+            <div class="left" id="showrating" style="font-size: 15px; color: rgb(3, 3, 3);margin-left: 10px;">rating :
+            </div>
             <ons-list-item>
-             
+
               <div class="right" style="font-size: 15px; margin-top: -65px;">
                 สถานะร้าน &nbsp; <div id="status"></div>
-              </ons-list-item>
-                <script>
-             var reviewstore = localStorage.getItem("namestore");
-            firestore.collection("Technicians").doc(reviewstore).collection("review").where("namestore", "==", reviewstore)
-              .onSnapshot(function (snapshot) {
-              
-                    var arrrating =[];
-                    var rating ;
-                snapshot.docChanges().forEach(function (change) {
-             
-                  
-                  if (change.type === 'removed') {
+            </ons-list-item>
+            <script>
+              var reviewstore = localStorage.getItem("namestore");
+              firestore.collection("Technicians").doc(reviewstore).collection("review").where("namestore", "==", reviewstore)
+                .onSnapshot(function (snapshot) {
 
-                  } else {
-                    var rating = parseInt(change.doc.data().rating);
-                    arrrating.push(rating );
+                  var arrrating = [];
+                  var rating;
+                  snapshot.docChanges().forEach(function (change) {
+
+
+                    if (change.type === 'removed') {
+
+                    } else {
+                      var rating = parseInt(change.doc.data().rating);
+                      arrrating.push(rating);
+
+
+
+                    }
+                    console.log(arrrating);
+                    return arrrating;
+                  });
+
+                  avgRating = arrrating.reduce((a, b) => a + b, 0.0) / arrrating.length
                   
-                  
-                  
-                  }
-                  console.log(arrrating);
-                return arrrating;
-                });
-               
-                avgRating= arrrating.reduce((a, b) => a + b, 0) / arrrating.length
-                     
                   $('#showrating').append(
-                      '<div style="font-size: 15px; color: rgb(235, 185, 22); margin-left: 65px ; margin-top: -23px;">'+avgRating +'</div>'
-                      
-                    )
-                
-              });
-                  ////=============================ฟังก์ชั่น เรียกช่างซ่อมรถ =========================================================
-                  function requestFix() {
-                    var nameCus = localStorage.getItem("nameCus");
-                    alert("nameCus"+nameCus);
-                    var namestore = localStorage.getItem("namestore");
-                    var d = new Date().toLocaleString();
-                    d = d.split(' ').slice(0, 5).join(' ');
-                    firebase.firestore().collection('requestFix').add({
-                      customer: nameCus,
-                      namestore: namestore,
-                      request: 1,
-                      accept: 0,
-                      done: 0,
-                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                      date: d
-                    }).then(function (docRef) {
-                      console.log("requestFix  " + docRef.id + " success");
-                      firebase.firestore().collection('requestFix').doc(docRef.id).update({
-                        fixID: docRef.id
+                    '<div style="font-size: 15px; color: rgb(235, 185, 22); margin-left: 65px ; margin-top: -23px;">' + avgRating + '</div>'
 
-                      })
-                    })
+                  )
 
-                    showModal();
+                });
+              ////=============================ฟังก์ชั่น เรียกช่างซ่อมรถ =========================================================
+              function requestFix() {
+                var nameCus = localStorage.getItem("nameCus");
+                // alert("nameCus" + nameCus);
+                var namestore = localStorage.getItem("namestore");
+                var d = new Date().toLocaleString();
+                d = d.split(' ').slice(0, 5).join(' ');
+                firebase.firestore().collection('requestFix').add({
+                  customer: nameCus,
+                  namestore: namestore,
+                  request: 1,
+                  accept: 0,
+                  done: 0,
+                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                  date: d
+                }).then(function (docRef) {
+                  console.log("requestFix  " + docRef.id + " success");
+                  localStorage.setItem("fixidcancle",docRef.id);
+                  firebase.firestore().collection('requestFix').doc(docRef.id).update({
+                    fixID: docRef.id
 
-                  }
-                </script>
-              </div>
+                  })
+                })
+
+                showModal();
+
+              }
+            </script>
+            </div>
             </ons-list-item>
             </div>
 
@@ -462,9 +463,11 @@
 
             function notifyAcceptFix() {
               var namestore_requert = localStorage.getItem("namestore");
+              var fxid = localStorage.getItem("fixID");
               firestore.collection("requestFix").where("namestore", "==", namestore_requert)
                 .onSnapshot(function (snapshot) {
                   snapshot.docChanges().forEach(function (change) {
+
 
                     if (change.type === "removed") {
                       console.log("Removed removed requestFix: ", change.doc.data());
@@ -475,10 +478,12 @@
                       if (change.doc.data().accept == 1 && change.doc.data().request == 0 && change.doc.data().done == 1) {
                         console.log("รับซ่อม ");
                         showAlertacceptFix();
-                      } else if (change.doc.data().accept == 2 && change.doc.data().request == 2 && change.doc.data().done == 0) {
+
+                      } else if ( change.doc.data().accept == 2 && change.doc.data().request == 2 && change.doc.data().done == 0) {
+
                         console.log("ปฏิเสธ");
                         showAlertcanceltFix();
-                        
+
                       }
 
                     }
@@ -488,7 +493,7 @@
 
             var showAlertacceptFix = function () {
               var namestore_alert = localStorage.getItem("namestore");
-              localStorage.setItem("reviewnamestore",namestore_alert);
+              localStorage.setItem("reviewnamestore", namestore_alert);
 
               ons.notification.alert(
 
@@ -496,11 +501,11 @@
               );
             };
 
-            // var showAlertcanceltFix = function () {
-            //   var namestore_alert = localStorage.getItem("namestore");
-            //   ons.notification.alert('ขอโทษคะ ร้าน :' + namestore_alert +
-            //     "ปธิเสธการรับซ่อม");
-            // };
+            var showAlertcanceltFix = function () {
+              var namestore_alert = localStorage.getItem("namestore");
+              ons.notification.alert('ขออภัย ร้าน :' + namestore_alert +
+                "ไม่สามารถให้บริการได้คะ");
+            };
 
           </script>
           <!-- <ons-button onclick="showTemplateDialog()">Show Dialog</ons-button> -->
@@ -783,7 +788,8 @@
             var customerreview = localStorage.getItem("nameCus");
             var photoURL = localStorage.getItem("photoURL");
             var FixIDReview = localStorage.getItem("FixIDReview");
-            var fixID = localStorage.getItem("");
+            var useremail = localStorage.getItem("userlogin");
+            
             var d = new Date().toLocaleString();
             d = d.split(' ').slice(0, 5).join(' ');
 
@@ -795,12 +801,32 @@
               customer: customerreview,
               dateTime: d,
               fixID: FixIDReview,
-              photoURLreview : photoURL
-              
+              photoURLreview: photoURL,
+              coin : 20
+          
             }).then(function (docRef) {
-                      console.log("reviewid  " + docRef.id + " success");
+              console.log("reviewid  " + docRef.id + " success");
 
-                    }).catch(function (error) {
+            }).catch(function (error) {
+              console.error('Error writing new message to Firebase Database', error);
+            });
+
+
+            firebase.firestore().collection('Users').doc(useremail).collection('ListFix').add({
+              reviewtext: textreview,
+              rating: Rating,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              namestore: namestorereview,
+              customer: customerreview,
+              dateTime: d,
+              fixID: FixIDReview,
+              coin : 20
+          
+            }).then(function (docRef) {
+              console.log("ListFix  " + docRef.id + " success");
+              localStorage.setItem("ListFix",docRef.id);
+
+            }).catch(function (error) {
               console.error('Error writing new message to Firebase Database', error);
             });
           } else {
@@ -816,10 +842,10 @@
 
           }
 
-              localStorage.removeItem("FixIDReview");
-              localStorage.removeItem("reviewnamestore");
-            var  myVar = setInterval(reloadpage, 2000);
-              
+          // localStorage.removeItem("FixIDReview");
+          localStorage.removeItem("reviewnamestore");
+          var myVar = setInterval(reloadpage, 2000);
+
         })
 
         function reloadpage() {
@@ -831,10 +857,7 @@
       <link rel="stylesheet" href="css/review.css">
       <div id="toastcheck"></div>
 
-      <ons-toast id="myToast" animation="ascend">
-        FABs up!
-        <button onclick="myToast.hide()">ok</button>
-      </ons-toast>
+
     </ons-page>
 
   </template>
@@ -846,9 +869,16 @@
     <ons-page id="Tab2">
       <div class="container">
         <ons-card id="coinspage">
-          <div class="con">
-            <center style="font-size: 40px;"><img src="img/coin.png" style="width: 60px;">&nbsp; 200 </center>
+          
+        <center ><div class="row"> 
+          <div class="col-6">
+           <img src="img/coin.png" style="width: 60px;" >
           </div>
+        <div class="col-6" style="font-size: 40px; margin-top: -50px; margin-left: -50px;">
+            &nbsp; <p id="coins"></p>  
+        </div></div>
+        </center>
+        
           <ons-card style="background-color: #a5cec3;">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -859,22 +889,24 @@
             <hr>
 
             <div class="input-group">
-              <span class="input-group-text" style="font-size: 12px;">จำนวนเหรียญ &nbsp;</span>
+              <span class="input-group-text" style="font-size: 10px;" >จำนวนเหรียญ &nbsp;</span>
               <select id="coin" class="mdb-select md-form" style="font-size: 12px;">
-                <option value="" disabled selected>เลือกจำนวน</option>
-                <option value="150">10 บาท (150 coins)</option>
-                <option value="250">20 บาท (250 coins)</option>
-                <option value="500">50 บาท (500 coins)</option>
+                <option value="" disabled selected >เลือกจำนวน</option>
+                <option value=150>10 บาท(150coins)</option>
+                <option value=250>20 บาท(250coins)</option>
+                <option value=500>50 บาท(500coins)</option>
               </select>
 
             </div>
+            
+            
           </ons-card>
           <center>
-            <section style="padding: 10px">
-              <button type="button" class="btn btn-danger" onclick="getCoin()">ยกเลิก</button>
-              <button type="button" class="btn btn-success" onclick="createAlertDialog1()">ตกลง</button>
+            <section style="padding: 10px; height: 80px;" >
+              <button type="button" class="btn btn-danger" >ยกเลิก</button>
+              <button type="button" class="btn btn-success" onclick="gcoin()">ตกลง</button>
 
-              <button type="button" class="btn btn-success" onclick="testreview()">review</button>
+              <!-- <button type="button" class="btn btn-success" onclick="testreview()">review</button> -->
               <script>
                 function testreview() {
                   document.querySelector('#myNavigator1').pushPage('review.html');
@@ -897,7 +929,50 @@
           </ons-alert-dialog>
         </template>
       </div>
+        <script>
+        var arrcoin = [];
+        var getcoinuser = localStorage.getItem("userlogin");
+      firestore.collection("Users").doc(getcoinuser).collection("ListFix").get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data().coin);
+          arrcoin.push(doc.data().coin);
+          return arrcoin
+        })
+       var  totalcoin= arrcoin.reduce((a, b) => a + b, 0)
+        console.log(totalcoin+10);
+        totalcoin = document.getElementById("coins").innerHTML = totalcoin+10;
+        localStorage.setItem("coin",totalcoin)
+    
 
+        });
+function gcoin() {
+  var cns = localStorage.getItem("coin");
+  cns = parseInt(cns)
+  var cn = document.getElementById("coin").value ; 
+  cn= parseInt(cn)
+  
+  console.log(cn-cns);
+  cn =cn-cns;
+  if (cn == 0) {
+     document.getElementById("coins").innerHTML = cn;
+     
+     createAlertDialog1()
+
+  }else{
+    ons.notification.alert("เหรียญไม่พอคะ ");
+
+  }
+ 
+
+}
+
+      
+       
+
+  
+        
+        </script>
     </ons-page>
   </template>
   <!--  ====================================================== // tab2 >> Coins ===================================================== -->
@@ -907,16 +982,60 @@
     <ons-page id="Tab3">
       <div id="bg-page"
         style="background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png');height: 88vh;width: auto;">
-        <ons-list-header>20/06/2019</ons-list-header>
-        <ons-card class="notificate">
-          <span>เปลี่ยนรหัสผ่าน</span>
-          <span class="notitext">คุณได้ทำการเปลี่ยนรหัสเมื่อเวลา 12.06 น.</span>
-        </ons-card>
-        <ons-card class="notificate">
-          <span>ได้รับเหรียญ 20 เหรียญ</span>
-          <span class="notitext">คุณได้รับเหรียญ 20 เหรียญจากการขอรับบริการซ่อม เมื่อ 18.06 น.</span>
-        </ons-card>
+        <div id="showListFix"> </div>
+       
       </div>
+      <script>
+      // history list 
+
+      // firestore.collection("Technicians").doc().collection("review").where("namestore", "==", namestore_requert ).get().then(function (querySnapshot) {
+      //   querySnapshot.forEach(function (doc) {
+      //     // doc.data() is never undefined for query doc snapshots
+      //     console.log(doc.id, " => ", doc.data().coin);
+
+      //   });
+      // });
+      var useremail = localStorage.getItem("userlogin");
+      var ListFix = localStorage.getItem("ListFix")
+
+      firestore.collection("Users").doc(useremail).collection("ListFix")
+              .onSnapshot(function (snapshot) {
+                snapshot.docChanges().forEach(function (change) {
+                  if (change.type === 'removed') {
+
+                  } else {
+                    console.log("rrrrrr" + change.doc.data().rating);
+                    var fixidlist = change.doc.data().fixID
+                      fixlist = fixidlist.slice(0, 8);
+                    $('#showListFix').append(
+                      '<ons-card >'+
+                      '<div style="margin-top: -10px">' +
+                      '<ons-list-item style="font-size: 10pt">' +
+                        '<div class="col-2" style="margin-left: -20px;">' +
+                      '<img class="list-item__thumbnail" src="img/coin.png" style="width: 30px; height: 30px;">' +
+                      '</div>' +
+                          
+                      ' <div class="col-10">' +
+                      '<p style="font-size: 12pt; margin-top: 8px;margin-left: -20px"">คุณได้รับเหรียญ ' + change.doc.data().coin + ' เหรียญ </p>' +
+                      '</div>' +
+                      ' <div>' +
+                      '<p style="font-size: 7pt; margin-top: -12px; margin-left: 22px">' +
+                       'เมื่อเวลา '+ change.doc.data().dateTime+' |'+' จากรายการซ่อม : '+fixlist +
+                      '  </p>' +
+
+                      '  </div>' +
+                      '</ons-list-item>' +
+
+                      ' </div>'+
+                    '</ons-card>'
+
+                    )
+                  }
+
+                });
+              });
+      
+      </script>
     </ons-page>
   </template>
   <!--  ====================================================== // tab3 >> History ===================================================== -->
@@ -959,10 +1078,10 @@
                       console.log(change.doc.data().email + change.doc.data().nphone + change.doc.data().user);
                       if (change.doc.data().profile == "") {
                         document.getElementById("profile-pic").src = "img/boy.png";
-                        localStorage.setItem("photoURL","");
+                        localStorage.setItem("photoURL", "");
                       } else {
                         document.getElementById("profile-pic").src = change.doc.data().profile;
-                        localStorage.setItem("photoURL",change.doc.data().profile);
+                        localStorage.setItem("photoURL", change.doc.data().profile);
                       }
                       document.getElementById("displayname").innerHTML = change.doc.data().user;
                       localStorage.setItem('nameCus', change.doc.data().user);
@@ -1080,6 +1199,7 @@
 
 
               function saveStoreImage() {
+                var newusername = localStorage.getItem("newusername");
                 var message = Picture;
                 var url;
 
@@ -1090,13 +1210,17 @@
                     url = downloadURL;
                     console.log("url" + url);
                     firebase.firestore().collection('Users').doc(userlogin).update({
-                      profile: url
-                    }).then(function () {
+                      profile: url,
+                      user :newusername
+                    }).then(function () {  
+                       localStorage.removeItem("newusername");
                       console.log("update already");
                       location.reload();
                     });
                   })
                 })
+             
+             
               }
 
 
@@ -1174,7 +1298,8 @@
               <ons-back-button>Back</ons-back-button>
             </div>
             <div class="center">FIX IT</div>
-            <div class="right"><i class="fas fa-check" style="font-size: medium; margin-right: 10px;margin-bottom: 5px;"></i></div>
+            <div class="right" id="savenewname"><i class="fas fa-check"
+                style="font-size: medium; margin-right: 10px;margin-bottom: 5px;"></i></div>
           </ons-toolbar>
           <div id="bg-page"
             style="background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png');height: 88vh;width: auto;">
@@ -1183,13 +1308,28 @@
               <div class="form-group">
                 <div class="form-row">
                   <div class="col-md-3 mb-3">
-                    <center><input style="margin-top: 20px; width: 80%;" type="text" class="form-control" id=""
-                      aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้"></center>
+                    <center><input style="margin-top: 20px; width: 80%;" type="text" class="form-control"
+                        id="newusername" aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้"></center>
                   </div>
                 </div>
               </div>
             </form>
+            <script>
 
+
+              document.getElementById("savenewname").addEventListener("click", function () {
+                var nusern = document.getElementById("newusername").value;
+                if (nusern != "") {
+                  localStorage.setItem("newusername", nusern)
+
+                } else {
+                  ons.notification.alert(
+                    "กรุณากรอกข้อความก่อนคะ "
+                  );
+                }
+              })
+
+            </script>
           </div>
         </ons-page>
       </template>
@@ -1226,7 +1366,8 @@
               <ons-back-button>Back</ons-back-button>
             </div>
             <div class="center">FIX IT</div>
-            <div class="right"><i class="fas fa-check" style="font-size: medium; margin-right: 10px; margin-bottom: 5px;"></i></div>
+            <div class="right"><i class="fas fa-check"
+                style="font-size: medium; margin-right: 10px; margin-bottom: 5px;"></i></div>
           </ons-toolbar>
           <div id="bg-page"
             style="background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png');height: 88vh;width: auto;">
@@ -1235,15 +1376,15 @@
                 <div class="form-row">
                   <div class="col-md-3 mb-3">
                     <center><input style="margin-top: 20px; width: 80%;" type="text" class="form-control" id=""
-                      aria-describedby="" placeholder="กรอกรหัสผ่านเดิม"></center>
+                        aria-describedby="" placeholder="กรอกรหัสผ่านเดิม"></center>
                   </div>
                   <div class="col-md-3 mb-3">
-                      <center><input style="width: 80%;" type="text" class="form-control" id=""
-                        aria-describedby="" placeholder="กรอกรหัสผ่านใหม่"></center>
-                    </div>
-                  
+                    <center><input style="width: 80%;" type="text" class="form-control" id="" aria-describedby=""
+                        placeholder="กรอกรหัสผ่านใหม่"></center>
+                  </div>
+
                 </div>
-              
+
               </div>
             </form>
 
@@ -1453,27 +1594,7 @@
       }
     });
 
-    // document.addEventListener('init', function (event) {
-    //   var page = event.target;
-    //   if (page.id === 'editprofile') {
-    //     page.querySelector('#push-page6').onclick = function () {
-    //       document.querySelector('#myNavigator1').pushPage('edittel.html', { data: { title: 'Edit Tel.' } });
-    //     };
-    //   } else if (page.id === 'editprofile') {
-    //     page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
-    //   }
-    // });
-
-    // document.addEventListener('init', function (event) {
-    //   var page = event.target;
-    //   if (page.id === 'editprofile') {
-    //     page.querySelector('#push-page7').onclick = function () {
-    //       document.querySelector('#myNavigator1').pushPage('editemail.html', { data: { title: 'Edit Email' } });
-    //     };
-    //   } else if (page.id === 'editemail') {
-    //     page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
-    //   }
-    // });
+    
 
     document.addEventListener('init', function (event) {
       var page = event.target;
@@ -1508,6 +1629,8 @@
       } else if (event.index == 1) {
         console.log('coins clicked');
         // get data for coins screen
+        
+
 
       }
       else if (event.index == 2) {
@@ -1594,7 +1717,9 @@
 
 
     ////======================= ฟังก์ชันนำทาง =============================
+
     function myNavFunc() {
+      // document.getElementById('my-alert-dialog').hide();
 
       var long = 98.3370182;
       var lat = 7.8947922;
@@ -1603,11 +1728,10 @@
         || (navigator.platform.indexOf("iPod") != -1)
         || (navigator.platform.indexOf("iPad") != -1)
         || (navigator.platform.indexOf("Android") != -1))
-        window.open('maps://maps.google.com/maps?saddr=' + lat + ',' + long + '&amp;ll=');
+        window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
       else
-        window.open('http://maps.google.com/maps?saddr=' + lat + ',' + long + '&amp;ll=');
+        window.open('http://maps.google.com/maps?daddr=' + lat + ',' + long + '&amp;ll=');
     }
-
     ////========================== AlertDialog=======================================
     var createAlertDialog = function () {
       var dialog = document.getElementById('my-alert-dialog');
@@ -1630,8 +1754,8 @@
 
     ////========================= scriptหน้า Coins.html ==========================================================
     function getCoin() {
-
-      firestore.collection("Users").get().then(function (querySnapshot) {
+      var getcoinuser = localStorage.getItem("userlogin");
+      firestore.collection("Users").doc(getcoinuser).collection("ListFix").get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data().coin);
@@ -1661,10 +1785,12 @@
           });
       }
     };
+    // กด ลบเหรียญ 
     var hideAlertDialog1 = function () {
       document
         .getElementById('my-alert-dialog1')
         .hide();
+
     };
 
     function editprofile() {

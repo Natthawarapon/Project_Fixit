@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-geolocation@4.0.2",
+  "_from": "cordova-plugin-geolocation",
   "_id": "cordova-plugin-geolocation@4.0.2",
   "_inBundle": false,
   "_integrity": "sha512-QGThnPKzPxESHkruZlpE0+5aFBVOet8al0vIJ7laSUOQHIC1dd/JY6peVIbtLboKi5Dap1wCKRubOqPqH8xcQA==",
   "_location": "/cordova-plugin-geolocation",
   "_phantomChildren": {},
   "_requested": {
-    "type": "version",
+    "type": "tag",
     "registry": true,
-    "raw": "cordova-plugin-geolocation@4.0.2",
+    "raw": "cordova-plugin-geolocation",
     "name": "cordova-plugin-geolocation",
     "escapedName": "cordova-plugin-geolocation",
-    "rawSpec": "4.0.2",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "4.0.2"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
     "#USER",
@@ -21,8 +21,8 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-geolocation/-/cordova-plugin-geolocation-4.0.2.tgz",
   "_shasum": "4668a01ae8a49e27c5515f8b81880983e96d7eb3",
-  "_spec": "cordova-plugin-geolocation@4.0.2",
-  "_where": "C:\\Users\\IPeeranan\\Desktop\\App\\Fixit-App",
+  "_spec": "cordova-plugin-geolocation",
+  "_where": "C:\\Users\\IPeeranan\\Desktop\\App-fixing",
   "author": {
     "name": "Apache Software Foundation"
   },

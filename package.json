@@ -1,12 +1,10 @@
 {
   "devDependencies": {
-    "cordova-plugin-whitelist": "1",
-    "cordova-plugin-geolocation": "4.0.2"
+    "cordova-plugin-whitelist": "1"
   },
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-geolocation": {},
       "cordova-plugin-buildinfo": {},
       "cordova-plugin-browsertab": {},
       "cordova-plugin-inappbrowser": {},
@@ -21,7 +19,8 @@
       "cordova-universal-links-plugin": {},
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      }
+      },
+      "cordova-plugin-geolocation": {}
     },
     "platforms": [
       "android"

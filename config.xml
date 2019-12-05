@@ -1,9 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-
-
     <name>Fix it </name>
-
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -12,7 +9,6 @@
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
-     <plugin name="cordova-plugin-geolocation" spec="4.0.2" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -20,27 +16,18 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-     <!-- <uses-permission android:name="android.permission.GEOLOCATION" /> -->
     <platform name="android">
         <allow-intent href="market:*" />
-       <!-- you can use any density that exists in the Android project -->
-  
-    <splash src="res/screen/android/splash-land-hdpi.png" density="port-hdpi"/>
-    <splash src="res/screen/android/splash-land-ldpi.png" density="port-ldpi"/>
-    <splash src="res/screen/android/splash-land-mdpi.png" density="port-mdpi"/>
-    <splash src="res/screen/android/splash-land-xhdpi.png" density="port-xhdpi"/> 
-
-        <icon src="res/icon/android/logo-36.png" density="ldpi" />
-        <icon src="res/icon/android/logo-48.png" density="mdpi" />
-        <icon src="res/icon/android/logo-72.png" density="hdpi" />
-
+        <splash density="port-hdpi" src="res/screen/android/splash-land-hdpi.png" />
+        <splash density="port-ldpi" src="res/screen/android/splash-land-ldpi.png" />
+        <splash density="port-mdpi" src="res/screen/android/splash-land-mdpi.png" />
+        <splash density="port-xhdpi" src="res/screen/android/splash-land-xhdpi.png" />
+        <icon density="ldpi" src="res/icon/android/logo-36.png" />
+        <icon density="mdpi" src="res/icon/android/logo-48.png" />
+        <icon density="hdpi" src="res/icon/android/logo-72.png" />
     </platform>
-
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-
-
- 
 </widget>
